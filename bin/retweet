@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+
+const command = require('commander');
+const dotenv = require('dotenv');
+const retweet = require('../');
+const core = retweet.core;
+const option = retweet.option;
+const packageArray = require('../package.json');
+
+let CORE;
+
+command
+	.version(packageArray.version)
+	.option('-Q, --search_query <search_query>')
+	.option('-T, --search_type <search_type>')
+	.option('-S, --search_count <search_count>')
+	.option('-R, --retweet_count <retweet_count>')
+	.option('-F, --favorite_count <favorite_count>')
+	.parse(process.argv);
+
+dotenv.config();
+if (process.env.TWITTER_CONSUMER_KEY &&
+	process.env.TWITTER_CONSUMER_SECRET &&
+	process.env.TWITTER_ACCESS_TOKEN &&
+	process.env.TWITTER_ACCESS_TOKEN_SECRET
+)
+{
+	option.init(
+	{
+		search_query: command.search_query,
+		search_type: command.search_type,
+		search_count: command.search_count,
+		retweet_count: command.retweet_count,
+		favorite_count: command.favorite_count
+	});
+	CORE = new core(
+	{
+		option: option
+	});
+	CORE.init(
+	{
+		consumer_key: process.env.TWITTER_CONSUMER_KEY,
+		consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+		access_token: process.env.TWITTER_ACCESS_TOKEN,
+		access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
+		timeout_ms: process.env.TIMEOUT_MS
+	});
+}
+else
+{
+	process.exit(1);
+}
