@@ -1,7 +1,7 @@
 {
 	"name": "retweet-bot",
 	"description": "Yet another Retweet Bot",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"license": "GPL-3.0",
 	"author":
 	{
@@ -21,9 +21,9 @@
 	},
 	"devDependencies":
 	{
-		"chai": "4.1.1",
-		"eslint": "4.5.0",
-		"mocha": "3.5.0"
+		"chai": "4.1.2",
+		"eslint": "4.8.0",
+		"mocha": "4.0.1"
 	},
 	"scripts":
 	{
@@ -32,6 +32,6 @@
 	},
 	"bin":
 	{
-		"twitter-bot" : "./bin/retweet-bot"
+		"retweet-bot" : "./bin/retweet-bot"
 	}
 }

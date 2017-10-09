@@ -12,7 +12,7 @@ let option;
  * @return Promise
  */
 
-function verify()
+function _verify()
 {
 	return instance.get('account/verify_credentials');
 }
@@ -25,7 +25,7 @@ function verify()
  * @return Promise
  */
 
-function search()
+function _search()
 {
 	return instance.get('search/tweets',
 	{
@@ -45,7 +45,7 @@ function search()
  * @return Promise
  */
 
-function retweet(id)
+function _retweet(id)
 {
 	return new Promise((resolve, reject) =>
 	{
@@ -77,7 +77,7 @@ function _process()
 	{
 		let promiseArray = [];
 
-		search()
+		_search()
 			.then(response =>
 			{
 				if (response.data && response.data.statuses)
@@ -86,7 +86,7 @@ function _process()
 					{
 						if (statusValue.retweet_count >= option.get('retweet_count') && statusValue.favorite_count >= option.get('favorite_count'))
 						{
-							promiseArray.push(retweet(statusValue.id_str));
+							promiseArray.push(_retweet(statusValue.id_str));
 						}
 					});
 
@@ -119,7 +119,7 @@ function _process()
 function init(initArray)
 {
 	instance = new twit(initArray);
-	verify()
+	_verify()
 		.then(() =>
 		{
 			process.stdout.write(wordingArray.bot_connected + wordingArray.exclamation_mark + '\n');

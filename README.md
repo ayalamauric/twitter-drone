@@ -20,7 +20,7 @@ npm install retweet-bot
 Setup
 -----
 
-Define your environment using a `.env` file:
+Define your local environment using a `.env` file:
 
 ```
 TWITTER_CONSUMER_KEY=***
