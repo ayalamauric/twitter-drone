@@ -2,7 +2,7 @@ const twit = require('twit');
 const ora = require('ora');
 const wordingArray = require('../wording.json');
 
-let instance;
+let drone;
 let spinner;
 let option;
 
@@ -16,7 +16,7 @@ let option;
 
 function _verify()
 {
-	return instance.get('account/verify_credentials');
+	return drone.get('account/verify_credentials');
 }
 
 /**
@@ -29,7 +29,7 @@ function _verify()
 
 function _search()
 {
-	return instance.get('search/tweets',
+	return drone.get('search/tweets',
 	{
 		q: option.get('search_query'),
 		result_type: option.get('search_type'),
@@ -51,7 +51,7 @@ function _retweet(tweetId)
 {
 	return new Promise((resolve, reject) =>
 	{
-		instance.post('statuses/retweet/' + tweetId, (error, data) =>
+		drone.post('statuses/retweet/' + tweetId, (error, data) =>
 		{
 			if (error)
 			{
@@ -81,7 +81,7 @@ function _favorite(tweetId)
 {
 	return new Promise((resolve, reject) =>
 	{
-		instance.post('favorites/create',
+		drone.post('favorites/create',
 		{
 			id: tweetId
 		}, (error, data) =>
@@ -114,7 +114,7 @@ function _follow(userId)
 {
 	return new Promise((resolve, reject) =>
 	{
-		instance.post('friendships/create',
+		drone.post('friendships/create',
 		{
 			id: userId
 		}, (error, data) =>
@@ -232,7 +232,7 @@ function run(action)
 
 function init(initArray)
 {
-	instance = new twit(initArray);
+	drone = new twit(initArray);
 	spinner = ora(wordingArray.please_wait + wordingArray.point.repeat(3)).start();
 }
 
