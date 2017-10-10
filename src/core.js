@@ -139,21 +139,21 @@ function _follow(userId)
  * @since 1.0.0
  *
  * @param action string
- * @param statuses object
+ * @param statusArray array
  *
  * @return array
  */
 
-function _createPromiseArray(action, statuses)
+function _createPromiseArray(action, statusArray)
 {
 	const retweetCount = option.get('retweet_count');
 	const favoriteCount = option.get('favorite_count');
 
 	let promiseArray = [];
 
-	/* process statuses */
+	/* process status */
 
-	statuses.forEach(statusValue =>
+	statusArray.forEach(statusValue =>
 	{
 		if (statusValue.retweet_count >= retweetCount && statusValue.favorite_count >= favoriteCount)
 		{
@@ -174,6 +174,23 @@ function _createPromiseArray(action, statuses)
 	return promiseArray;
 }
 
+
+/**
+ * unique by
+ *
+ * @since 1.0.0
+ *
+ * @param rawArray array
+ * @param key string
+ *
+ * @return Promise
+ */
+
+function _uniqueBy(rawArray, key)
+{
+	return rawArray.filter((first, index) => rawArray.findIndex(second => first[key] === second[key]) === index);
+}
+
 /**
  * process
  *
@@ -191,7 +208,8 @@ function _process(action)
 		_search()
 			.then(response =>
 			{
-				const promiseArray = _createPromiseArray(action, response.data.statuses);
+				const statusArray = _uniqueBy(response.data.statuses, 'text');
+				const promiseArray = _createPromiseArray(action, statusArray);
 
 				Promise
 					.all(promiseArray)
