@@ -20,13 +20,13 @@ npm install twitter-drone
 Setup
 -----
 
-Define your local environment using a `.env` file:
+Define your environment variables inside the `.env` file:
 
 ```
-TWITTER_CONSUMER_KEY=***
-TWITTER_CONSUMER_SECRET=***
-TWITTER_ACCESS_TOKEN=***
-TWITTER_ACCESS_TOKEN_SECRET=***
+TWITTER_CONSUMER_KEY=
+TWITTER_CONSUMER_SECRET=
+TWITTER_ACCESS_TOKEN=
+TWITTER_ACCESS_TOKEN_SECRET=
 TIMEOUT_MS=60000
 ```
 
