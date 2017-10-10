@@ -2,9 +2,9 @@
 
 const command = require('commander');
 const dotenv = require('dotenv');
-const retweet = require('../');
-const core = retweet.core;
-const option = retweet.option;
+const bot = require('../');
+const core = bot.core;
+const option = bot.option;
 const packageArray = require('../package.json');
 
 let CORE;

@@ -1,19 +1,19 @@
-Retweet Bot
+Twitter Bot
 ===========
 
-> Yet another Retweet Bot.
+> Dead simple bot to automate retweet, favorite and follow on Twitter.
 
-[![Build Status](https://img.shields.io/travis/redaxmedia/retweet-bot.svg)](https://travis-ci.org/redaxmedia/retweet-bot)
-[![Dependency Status](https://gemnasium.com/badges/github.com/redaxmedia/retweet-bot.svg)](https://gemnasium.com/github.com/redaxmedia/retweet-bot)
-[![NPM Version](https://img.shields.io/npm/v/retweet-bot.svg)](https://www.npmjs.com/package/retweet-bot)
-[![GitHub Stats](https://img.shields.io/badge/github-stats-ff5500.svg)](http://githubstats.com/redaxmedia/retweet-bot)
+[![Build Status](https://img.shields.io/travis/redaxmedia/twitter-bot.svg)](https://travis-ci.org/redaxmedia/twitter-bot)
+[![Dependency Status](https://gemnasium.com/badges/github.com/redaxmedia/twitter-bot.svg)](https://gemnasium.com/github.com/redaxmedia/twitter-bot)
+[![NPM Version](https://img.shields.io/npm/v/twitter-bot.svg)](https://www.npmjs.com/package/twitter-bot)
+[![GitHub Stats](https://img.shields.io/badge/github-stats-ff5500.svg)](http://githubstats.com/redaxmedia/twitter-bot)
 
 
 Installation
 ------------
 
 ```
-npm install retweet-bot
+npm install twitter-bot
 ```
 
 
@@ -35,7 +35,7 @@ Usage
 -----
 
 ```
-bin/retweet [options]
+bin/twitter-bot [options]
 
 -V, --version
 -Q, --search_query <search_query>
@@ -53,11 +53,11 @@ Examples
 Retweet popular `#CSS` tweets:
 
 ```
-bin/retweet --search_query=#CSS --search_type=popular
+bin/twitter-bot --search_query=#CSS --search_type=popular
 ```
 
 Retweet recent `#PHP` tweets with at least 10 reweets:
 
 ```
-bin/retweet --search_query=#PHP --search_type=recent --retweet_count=10
+bin/twitter-bot --search_query=#PHP --search_type=recent --retweet_count=10
 ```

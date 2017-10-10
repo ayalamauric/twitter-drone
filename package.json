@@ -1,6 +1,6 @@
 {
-	"name": "retweet-bot",
-	"description": "Yet another Retweet Bot",
+	"name": "twitter-bot",
+	"description": "Dead simple bot to automate retweet, favorite and follow on Twitter",
 	"version": "0.1.0",
 	"license": "GPL-3.0",
 	"author":
@@ -10,7 +10,7 @@
 	},
 	"bugs":
 	{
-		"url": "https://github.com/redaxmedia/retweet-bot/issues"
+		"url": "https://github.com/redaxmedia/twitter-bot/issues"
 	},
 	"dependencies":
 	{
@@ -32,6 +32,6 @@
 	},
 	"bin":
 	{
-		"retweet-bot" : "./bin/retweet-bot"
+		"twitter-bot" : "./bin/twitter-bot"
 	}
 }
