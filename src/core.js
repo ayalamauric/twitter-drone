@@ -1,7 +1,9 @@
 const twit = require('twit');
+const ora = require('ora');
 const wordingArray = require('../wording.json');
 
 let instance;
+let spinner;
 let option;
 
 /**
@@ -40,27 +42,136 @@ function _search()
  *
  * @since 1.0.0
  *
- * @param id string
+ * @param tweetId string
  *
  * @return Promise
  */
 
-function _retweet(id)
+function _retweet(tweetId)
 {
 	return new Promise((resolve, reject) =>
 	{
-		instance.post('statuses/retweet/' + id)
-			.then(() =>
+		instance.post('statuses/retweet/' + tweetId, (error, data) =>
+		{
+			if (error)
 			{
-				process.stdout.write('.');
-				resolve();
-			})
-			.catch(error =>
-			{
-				process.stderr.write(error + '\n');
+				spinner.fail(error);
 				reject();
-			});
+			}
+			else
+			{
+				spinner.succeed(data.text);
+				resolve();
+			}
+		});
 	});
+}
+
+/**
+ * favorite
+ *
+ * @since 1.0.0
+ *
+ * @param tweetId string
+ *
+ * @return Promise
+ */
+
+function _favorite(tweetId)
+{
+	return new Promise((resolve, reject) =>
+	{
+		instance.post('favorites/create',
+		{
+			id: tweetId
+		}, (error, data) =>
+		{
+			if (error)
+			{
+				spinner.fail(error);
+				reject();
+			}
+			else
+			{
+				spinner.succeed(data.text);
+				resolve();
+			}
+		});
+	});
+}
+
+/**
+ * follow
+ *
+ * @since 1.0.0
+ *
+ * @param userId string
+ *
+ * @return Promise
+ */
+
+function _follow(userId)
+{
+	return new Promise((resolve, reject) =>
+	{
+		instance.post('friendships/create',
+		{
+			id: userId
+		}, (error, data) =>
+		{
+			if (error)
+			{
+				spinner.fail(error);
+				reject();
+			}
+			else
+			{
+				spinner.succeed(data.name);
+				resolve();
+			}
+		});
+	});
+}
+
+/**
+ * create promise array
+ *
+ * @since 1.0.0
+ *
+ * @param action string
+ * @param statuses object
+ *
+ * @return array
+ */
+
+function _createPromiseArray(action, statuses)
+{
+	const retweetCount = option.get('retweet_count');
+	const favoriteCount = option.get('favorite_count');
+
+	let promiseArray = [];
+
+	/* process statuses */
+
+	statuses.forEach(statusValue =>
+	{
+		if (statusValue.retweet_count >= retweetCount && statusValue.favorite_count >= favoriteCount)
+		{
+			if (action === 'retweet')
+			{
+				promiseArray.push(_retweet(statusValue.id_str));
+			}
+			if (action === 'favorite')
+			{
+				promiseArray.push(_favorite(statusValue.id_str));
+			}
+			if (action === 'follow')
+			{
+				promiseArray.push(_follow(statusValue.user.id_str));
+			}
+		}
+	});
+	return promiseArray;
 }
 
 /**
@@ -68,44 +179,47 @@ function _retweet(id)
  *
  * @since 1.0.0
  *
+ * @param action string
+ *
  * @return Promise
  */
 
-function _process()
+function _process(action)
 {
 	return new Promise((resolve, reject) =>
 	{
-		let promiseArray = [];
-
 		_search()
 			.then(response =>
 			{
-				if (response.data && response.data.statuses)
-				{
-					response.data.statuses.forEach(statusValue =>
-					{
-						if (statusValue.retweet_count >= option.get('retweet_count') && statusValue.favorite_count >= option.get('favorite_count'))
-						{
-							promiseArray.push(_retweet(statusValue.id_str));
-						}
-					});
+				const promiseArray = _createPromiseArray(action, response.data.statuses);
 
-					/* handle all promises */
-
-					Promise
-						.all(promiseArray)
-						.then(() =>
-						{
-							resolve();
-						})
-						.catch(error =>
-						{
-							process.stderr.write(error + '\n');
-							reject();
-						});
-				}
+				Promise
+					.all(promiseArray)
+					.then(() => resolve())
+					.catch(() => reject());
 			});
 	});
+}
+
+/**
+ * run
+ *
+ * @since 1.0.0
+ *
+ * @param action string
+ */
+
+function run(action)
+{
+	_verify()
+		.then(() =>
+		{
+			spinner.start(wordingArray.bot_connected + wordingArray.exclamation_mark);
+			_process(action)
+				.then(() => spinner.stop())
+				.catch(() => spinner.stop());
+		})
+		.catch(() => spinner.stop());
 }
 
 /**
@@ -119,20 +233,7 @@ function _process()
 function init(initArray)
 {
 	instance = new twit(initArray);
-	_verify()
-		.then(() =>
-		{
-			process.stdout.write(wordingArray.bot_connected + wordingArray.exclamation_mark + '\n');
-			_process()
-				.then(() =>
-				{
-					process.stdout.write('\n');
-				});
-		})
-		.catch(error =>
-		{
-			process.stderr.write(error + '\n');
-		});
+	spinner = ora(wordingArray.please_wait + wordingArray.point.repeat(3)).start();
 }
 
 /**
@@ -149,7 +250,8 @@ function construct(dependency)
 {
 	const exports =
 	{
-		init: init
+		init: init,
+		run: run
 	};
 
 	/* inject dependency */

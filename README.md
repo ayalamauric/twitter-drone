@@ -35,7 +35,11 @@ Usage
 -----
 
 ```
-bin/twitter-drone [options]
+bin/twitter-drone [command] [options]
+
+retweet
+favorite
+follow
 
 -V, --version
 -Q, --search_query <search_query>
@@ -53,11 +57,17 @@ Examples
 Retweet popular `#CSS` tweets:
 
 ```
-bin/twitter-drone --search_query=#CSS --search_type=popular
+bin/twitter-drone retweet --search_query=#CSS --search_type=popular
 ```
 
-Retweet recent `#PHP` tweets with at least 10 reweets:
+Favorite recent `#PHP` tweets with at least 10 reweets:
 
 ```
-bin/twitter-drone --search_query=#PHP --search_type=recent --retweet_count=10
+bin/twitter-drone favorite --search_query=#PHP --retweet_count=10
+```
+
+Follow users of popular `#HTML` tweets:
+
+```
+bin/twitter-drone follow --search_query=#HTML --search_type=popular
 ```
