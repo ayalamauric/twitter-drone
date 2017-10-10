@@ -1,5 +1,5 @@
 {
-	"name": "twitter-bot",
+	"name": "twitter-drone",
 	"description": "Dead simple bot to automate retweet, favorite and follow on Twitter",
 	"version": "0.1.0",
 	"license": "GPL-3.0",
@@ -10,7 +10,7 @@
 	},
 	"bugs":
 	{
-		"url": "https://github.com/redaxmedia/twitter-bot/issues"
+		"url": "https://github.com/redaxmedia/twitter-drone/issues"
 	},
 	"dependencies":
 	{
@@ -32,6 +32,6 @@
 	},
 	"bin":
 	{
-		"twitter-bot" : "./bin/twitter-bot"
+		"twitter-drone" : "./bin/twitter-drone"
 	}
 }

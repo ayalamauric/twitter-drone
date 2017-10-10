@@ -2,9 +2,9 @@
 
 const command = require('commander');
 const dotenv = require('dotenv');
-const bot = require('../');
-const core = bot.core;
-const option = bot.option;
+const drone = require('../');
+const core = drone.core;
+const option = drone.option;
 const packageArray = require('../package.json');
 
 let CORE;

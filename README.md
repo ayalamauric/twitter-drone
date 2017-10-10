@@ -1,19 +1,19 @@
-Twitter Bot
-===========
+Twitter Drone
+=============
 
 > Dead simple bot to automate retweet, favorite and follow on Twitter.
 
-[![Build Status](https://img.shields.io/travis/redaxmedia/twitter-bot.svg)](https://travis-ci.org/redaxmedia/twitter-bot)
-[![Dependency Status](https://gemnasium.com/badges/github.com/redaxmedia/twitter-bot.svg)](https://gemnasium.com/github.com/redaxmedia/twitter-bot)
-[![NPM Version](https://img.shields.io/npm/v/twitter-bot.svg)](https://www.npmjs.com/package/twitter-bot)
-[![GitHub Stats](https://img.shields.io/badge/github-stats-ff5500.svg)](http://githubstats.com/redaxmedia/twitter-bot)
+[![Build Status](https://img.shields.io/travis/redaxmedia/twitter-drone.svg)](https://travis-ci.org/redaxmedia/twitter-drone)
+[![Dependency Status](https://gemnasium.com/badges/github.com/redaxmedia/twitter-drone.svg)](https://gemnasium.com/github.com/redaxmedia/twitter-drone)
+[![NPM Version](https://img.shields.io/npm/v/twitter-drone.svg)](https://www.npmjs.com/package/twitter-drone)
+[![GitHub Stats](https://img.shields.io/badge/github-stats-ff5500.svg)](http://githubstats.com/redaxmedia/twitter-drone)
 
 
 Installation
 ------------
 
 ```
-npm install twitter-bot
+npm install twitter-drone
 ```
 
 
@@ -35,7 +35,7 @@ Usage
 -----
 
 ```
-bin/twitter-bot [options]
+bin/twitter-drone [options]
 
 -V, --version
 -Q, --search_query <search_query>
@@ -53,11 +53,11 @@ Examples
 Retweet popular `#CSS` tweets:
 
 ```
-bin/twitter-bot --search_query=#CSS --search_type=popular
+bin/twitter-drone --search_query=#CSS --search_type=popular
 ```
 
 Retweet recent `#PHP` tweets with at least 10 reweets:
 
 ```
-bin/twitter-bot --search_query=#PHP --search_type=recent --retweet_count=10
+bin/twitter-drone --search_query=#PHP --search_type=recent --retweet_count=10
 ```
