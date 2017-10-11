@@ -44,10 +44,10 @@ function _search()
 {
 	return drone.get('search/tweets',
 	{
-		q: option.get('search_query'),
-		result_type: option.get('search_type'),
-		lang: option.get('search_lang'),
-		count: option.get('search_count')
+		q: option.get('searchQuery'),
+		result_type: option.get('searchType'),
+		lang: option.get('searchLang'),
+		count: option.get('searchCount')
 	});
 }
 
@@ -160,9 +160,9 @@ function _follow(userId)
 
 function _createPromiseArray(action, statusArray)
 {
-	const retweetCount = option.get('retweet_count');
-	const favoriteCount = option.get('favorite_count');
-	const dryRun = option.get('dry_run');
+	const retweetCount = option.get('retweetCount');
+	const favoriteCount = option.get('favoriteCount');
+	const dryRun = option.get('dryRun');
 
 	let promiseArray = [];
 
@@ -289,8 +289,8 @@ function _backgroundRun(action, interval)
 
 function run(action)
 {
-	const backgroundRun = option.get('background_run');
-	const backgroundInterval = Math.abs(option.get('background_interval'));
+	const backgroundRun = option.get('backgroundRun');
+	const backgroundInterval = Math.abs(option.get('backgroundInterval'));
 
 	_verify()
 		.then(() =>
