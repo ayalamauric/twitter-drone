@@ -189,7 +189,6 @@ function _createPromiseArray(action, statusArray)
 	return promiseArray;
 }
 
-
 /**
  * unique by
  *

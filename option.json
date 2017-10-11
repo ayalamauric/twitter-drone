@@ -5,7 +5,7 @@
 	"searchCount": 10,
 	"retweetCount": 0,
 	"favoriteCount": 0,
-	"backgroundInterval": 60000,
+	"backgroundInterval": 600000,
 	"backgroundRun": false,
 	"dryRun": false
 }
