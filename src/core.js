@@ -298,7 +298,7 @@ function run(action)
 			spinner.start(wordingArray.drone_connected + wordingArray.exclamation_mark);
 			_process(action)
 				.then(() => backgroundRun ? _backgroundRun(action, backgroundInterval) : spinner.stop())
-				.catch(() => spinner.stop());
+				.catch(() => backgroundRun ? _backgroundRun(action, backgroundInterval) : spinner.stop());
 		})
 		.catch(error => spinner.fail(error));
 }
