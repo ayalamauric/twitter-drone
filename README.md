@@ -44,9 +44,13 @@ follow
 -V, --version
 -Q, --search_query <search_query>
 -T, --search_type <search_type>
+-L, --search_lang <search_lang>
 -S, --search_count <search_count>
 -R, --retweet_count <retweet_count>
 -F, --favorite_count <favorite_count>
+-I, --background_interval <background_interval>
+-B, --background_run
+-D, --dry_run
 -h, --help
 ```
 
@@ -54,20 +58,20 @@ follow
 Examples
 --------
 
-Retweet popular `#CSS` tweets:
+Retweet popular `CSS` tweets:
 
 ```
-bin/twitter-drone retweet --search_query=#CSS --search_type=popular
+bin/twitter-drone retweet --search_query=#css --search_type=popular
 ```
 
-Favorite recent `#PHP` tweets with at least 10 reweets:
+Favorite recent `PHP` tweets with at least 10 reweets:
 
 ```
-bin/twitter-drone favorite --search_query=#PHP --retweet_count=10
+bin/twitter-drone favorite --search_query=#php --retweet_count=10
 ```
 
-Follow users of popular `#HTML` tweets:
+Follow users of popular `HTML` tweets:
 
 ```
-bin/twitter-drone follow --search_query=#HTML --search_type=popular
+bin/twitter-drone follow --search_query=#html --search_type=popular
 ```

@@ -14,9 +14,13 @@ command
 	.version(packageArray.version)
 	.option('-Q, --search_query <search_query>')
 	.option('-T, --search_type <search_type>')
+	.option('-L, --search_lang <search_lang>')
 	.option('-S, --search_count <search_count>')
 	.option('-R, --retweet_count <retweet_count>')
-	.option('-F, --favorite_count <favorite_count>');
+	.option('-F, --favorite_count <favorite_count>')
+	.option('-I, --background_interval <background_interval>')
+	.option('-B, --background_run')
+	.option('-D, --dry_run');
 
 command.command('retweet').action(() => action = 'retweet');
 command.command('favorite').action(() => action = 'favorite');
@@ -34,9 +38,13 @@ if (process.env.TWITTER_CONSUMER_KEY &&
 	{
 		search_query: command.search_query,
 		search_type: command.search_type,
+		search_lang: command.search_lang,
 		search_count: command.search_count,
 		retweet_count: command.retweet_count,
-		favorite_count: command.favorite_count
+		favorite_count: command.favorite_count,
+		background_interval: command.background_interval,
+		background_run: command.background_run,
+		dry_run: command.dry_run
 	});
 	CORE = new core(
 	{

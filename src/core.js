@@ -16,7 +16,20 @@ let option;
 
 function _verify()
 {
-	return drone.get('account/verify_credentials');
+	return new Promise((resolve, reject) =>
+	{
+		drone.get('account/verify_credentials', error =>
+		{
+			if (error)
+			{
+				reject(error);
+			}
+			else
+			{
+				resolve();
+			}
+		});
+	});
 }
 
 /**
@@ -33,6 +46,7 @@ function _search()
 	{
 		q: option.get('search_query'),
 		result_type: option.get('search_type'),
+		lang: option.get('search_lang'),
 		count: option.get('search_count')
 	});
 }
@@ -148,6 +162,7 @@ function _createPromiseArray(action, statusArray)
 {
 	const retweetCount = option.get('retweet_count');
 	const favoriteCount = option.get('favorite_count');
+	const dryRun = option.get('dry_run');
 
 	let promiseArray = [];
 
@@ -159,15 +174,15 @@ function _createPromiseArray(action, statusArray)
 		{
 			if (action === 'retweet')
 			{
-				promiseArray.push(_retweet(statusValue.id_str));
+				promiseArray.push(dryRun ? _dryRun(statusValue.id_str) : _retweet(statusValue.id_str));
 			}
 			if (action === 'favorite')
 			{
-				promiseArray.push(_favorite(statusValue.id_str));
+				promiseArray.push(dryRun ? _dryRun(statusValue.id_str) : _favorite(statusValue.id_str));
 			}
 			if (action === 'follow')
 			{
-				promiseArray.push(_follow(statusValue.user.id_str));
+				promiseArray.push(dryRun ? _dryRun(statusValue.user.id_str) : _follow(statusValue.user.id_str));
 			}
 		}
 	});
@@ -208,15 +223,60 @@ function _process(action)
 		_search()
 			.then(response =>
 			{
-				const statusArray = _uniqueBy(response.data.statuses, 'text');
+				const statusArray = _uniqueBy(response.data.statuses ? response.data.statuses : [], 'text');
 				const promiseArray = _createPromiseArray(action, statusArray);
 
 				Promise
 					.all(promiseArray)
 					.then(() => resolve())
-					.catch(() => reject());
-			});
+					.catch(error => reject(error));
+			})
+			.catch(error => reject(error));
 	});
+}
+
+/**
+ * dry run
+ *
+ * @since 1.0.0
+ *
+ * @param text string
+ *
+ * @return Promise
+ */
+
+function _dryRun(text)
+{
+	return new Promise(resolve =>
+	{
+		spinner.info(text);
+		resolve();
+	});
+}
+
+/**
+ * background run
+ *
+ * @since 1.0.0
+ *
+ * @param action string
+ * @param interval number
+ */
+
+function _backgroundRun(action, interval)
+{
+	let countdown = Math.ceil(interval / 1000);
+
+	clearInterval(this.intervalCountdown);
+	clearInterval(this.intervalRun);
+
+	/* handle interval */
+
+	this.intervalCountdown = setInterval(() =>
+	{
+		spinner.start(wordingArray.drone_waiting + ' ' + countdown-- + ' ' + wordingArray.seconds + wordingArray.point);
+	}, 1000);
+	this.intervalRun = setInterval(() => run(action), interval);
 }
 
 /**
@@ -229,15 +289,18 @@ function _process(action)
 
 function run(action)
 {
+	const backgroundRun = option.get('background_run');
+	const backgroundInterval = Math.abs(option.get('background_interval'));
+
 	_verify()
 		.then(() =>
 		{
-			spinner.start(wordingArray.bot_connected + wordingArray.exclamation_mark);
+			spinner.start(wordingArray.drone_connected + wordingArray.exclamation_mark);
 			_process(action)
-				.then(() => spinner.stop())
+				.then(() => backgroundRun ? _backgroundRun(action, backgroundInterval) : spinner.stop())
 				.catch(() => spinner.stop());
 		})
-		.catch(() => spinner.stop());
+		.catch(error => spinner.fail(error));
 }
 
 /**
