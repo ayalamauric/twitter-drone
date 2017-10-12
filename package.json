@@ -1,7 +1,7 @@
 {
 	"name": "twitter-drone",
 	"description": "Dead simple bot to automate retweet, favorite and follow on Twitter",
-	"version": "0.3.2",
+	"version": "0.3.3",
 	"license": "GPL-3.0",
 	"keywords":
 	[
