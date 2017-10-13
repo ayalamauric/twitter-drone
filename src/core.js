@@ -1,8 +1,9 @@
-const twit = require('twit');
+const Twit = require('twit');
 const ora = require('ora');
 const wordingArray = require('../wording.json');
 
 let drone;
+let twit;
 let spinner;
 let option;
 
@@ -18,7 +19,7 @@ function _verify()
 {
 	return new Promise((resolve, reject) =>
 	{
-		drone.get('account/verify_credentials', error =>
+		twit.get('account/verify_credentials', (error, data) =>
 		{
 			if (error)
 			{
@@ -26,6 +27,16 @@ function _verify()
 			}
 			else
 			{
+				drone =
+				{
+					'id_str': data.id_str,
+					'name': data.name,
+					'screen_name': data.screen_name,
+					'description': data.description,
+					'followers_count': data.followers_count,
+					'friends_count': data.friends_count,
+					'statuses_count': data.statuses_count
+				};
 				resolve();
 			}
 		});
@@ -42,7 +53,7 @@ function _verify()
 
 function _search()
 {
-	return drone.get('search/tweets',
+	return twit.get('search/tweets',
 	{
 		q: option.get('searchQuery'),
 		result_type: option.get('searchType'),
@@ -65,7 +76,7 @@ function _retweet(tweetId)
 {
 	return new Promise((resolve, reject) =>
 	{
-		drone.post('statuses/retweet/' + tweetId, (error, data) =>
+		twit.post('statuses/retweet/' + tweetId, (error, data) =>
 		{
 			if (error)
 			{
@@ -95,7 +106,7 @@ function _favorite(tweetId)
 {
 	return new Promise((resolve, reject) =>
 	{
-		drone.post('favorites/create',
+		twit.post('favorites/create',
 		{
 			id: tweetId
 		}, (error, data) =>
@@ -128,7 +139,7 @@ function _follow(userId)
 {
 	return new Promise((resolve, reject) =>
 	{
-		drone.post('friendships/create',
+		twit.post('friendships/create',
 		{
 			id: userId
 		}, (error, data) =>
@@ -170,7 +181,7 @@ function _createPromiseArray(action, statusArray)
 
 	statusArray.forEach(statusValue =>
 	{
-		if (statusValue.retweet_count >= retweetCount && statusValue.favorite_count >= favoriteCount)
+		if (statusValue.retweet_count >= retweetCount && statusValue.favorite_count >= favoriteCount && statusValue.user.id_str !== drone.id_str)
 		{
 			if (action === 'retweet')
 			{
@@ -312,7 +323,7 @@ function run(action)
 
 function init(initArray)
 {
-	drone = new twit(initArray);
+	twit = new Twit(initArray);
 	spinner = ora(wordingArray.please_wait + wordingArray.point.repeat(3)).start();
 }
 

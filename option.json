@@ -2,7 +2,7 @@
 	"searchQuery": "#node",
 	"searchType": "recent",
 	"searchLang": "en",
-	"searchCount": 10,
+	"searchCount": 100,
 	"retweetCount": 0,
 	"favoriteCount": 0,
 	"backgroundInterval": 600000,
