@@ -40,22 +40,31 @@ describe('core', () =>
 {
 	it('retweet', done =>
 	{
-		CORE.process('retweet')
-			.then(() => done())
-			.catch(error => done(error));
+		CORE.verify().then(() =>
+		{
+			CORE.process('retweet')
+				.then(() => done())
+				.catch(error => done(error));
+		});
 	});
 
 	it('favorite', done =>
 	{
-		CORE.process('favorite')
-			.then(() => done())
-			.catch(error => done(error));
+		CORE.verify().then(() =>
+		{
+			CORE.process('favorite')
+				.then(() => done())
+				.catch(error => done(error));
+		});
 	});
 
 	it('follow', done =>
 	{
-		CORE.process('follow')
-			.then(() => done())
-			.catch(error => done(error));
+		CORE.verify().then(() =>
+		{
+			CORE.process('follow')
+				.then(() => done())
+				.catch(error => done(error));
+		});
 	});
 });

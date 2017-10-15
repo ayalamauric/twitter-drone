@@ -25,7 +25,7 @@ let intervalRun;
  * @return Promise
  */
 
-function _verify()
+function verify()
 {
 	return new Promise((resolve, reject) =>
 	{
@@ -312,7 +312,7 @@ function run(action)
 	const backgroundRun = option.get('backgroundRun');
 	const backgroundInterval = Math.abs(option.get('backgroundInterval'));
 
-	_verify()
+	verify()
 		.then(() =>
 		{
 			spinner.start(wordingArray.drone_connected + wordingArray.exclamation_mark);
@@ -352,7 +352,8 @@ function construct(dependency)
 	{
 		init: init,
 		run: run,
-		process: process
+		process: process,
+		verify: verify
 	};
 
 	/* inject dependency */
