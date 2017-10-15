@@ -20,13 +20,11 @@ function start(text)
  * stop
  *
  * @since 1.0.0
- *
- * @param text string
  */
 
-function stop(text)
+function stop()
 {
-	spinner.stop(text);
+	spinner.stop();
 }
 
 /**
