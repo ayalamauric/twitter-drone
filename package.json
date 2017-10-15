@@ -1,7 +1,7 @@
 {
 	"name": "twitter-drone",
 	"description": "Dead simple bot to automate retweet, favorite and follow on Twitter",
-	"version": "0.4.0",
+	"version": "1.0.0",
 	"license": "GPL-3.0",
 	"keywords":
 	[
@@ -32,7 +32,6 @@
 	},
 	"devDependencies":
 	{
-		"chai": "4.1.2",
 		"eslint": "4.8.0",
 		"mocha": "4.0.1"
 	},

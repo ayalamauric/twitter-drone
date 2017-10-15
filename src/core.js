@@ -1,11 +1,21 @@
 const Twit = require('twit');
-const ora = require('ora');
 const wordingArray = require('../wording.json');
 
-let drone;
+let drone =
+{
+	id_str: null,
+	name: null,
+	screen_name: null,
+	description: null,
+	followers_count: null,
+	friends_count: null,
+	statuses_count: null
+};
 let twit;
 let spinner;
 let option;
+let intervalCountdown;
+let intervalRun;
 
 /**
  * verify
@@ -29,13 +39,13 @@ function _verify()
 			{
 				drone =
 				{
-					'id_str': data.id_str,
-					'name': data.name,
-					'screen_name': data.screen_name,
-					'description': data.description,
-					'followers_count': data.followers_count,
-					'friends_count': data.friends_count,
-					'statuses_count': data.statuses_count
+					id_str: data.id_str,
+					name: data.name,
+					screen_name: data.screen_name,
+					description: data.description,
+					followers_count: data.followers_count,
+					friends_count: data.friends_count,
+					statuses_count: data.statuses_count
 				};
 				resolve();
 			}
@@ -85,7 +95,7 @@ function _retweet(tweetId)
 			}
 			else
 			{
-				spinner.succeed(data.text);
+				spinner.pass(data.text);
 				resolve();
 			}
 		});
@@ -118,7 +128,7 @@ function _favorite(tweetId)
 			}
 			else
 			{
-				spinner.succeed(data.text);
+				spinner.pass(data.text);
 				resolve();
 			}
 		});
@@ -151,7 +161,7 @@ function _follow(userId)
 			}
 			else
 			{
-				spinner.succeed(data.name);
+				spinner.pass(data.name);
 				resolve();
 			}
 		});
@@ -226,14 +236,14 @@ function _uniqueBy(rawArray, key)
  * @return Promise
  */
 
-function _process(action)
+function process(action)
 {
 	return new Promise((resolve, reject) =>
 	{
 		_search()
 			.then(response =>
 			{
-				const statusArray = _uniqueBy(response.data.statuses ? response.data.statuses : [], 'text');
+				const statusArray = _uniqueBy(response.data && response.data.statuses ? response.data.statuses : [], 'text');
 				const promiseArray = _createPromiseArray(action, statusArray);
 
 				Promise
@@ -259,7 +269,7 @@ function _dryRun(text)
 {
 	return new Promise(resolve =>
 	{
-		spinner.info(text);
+		spinner.skip(text);
 		resolve();
 	});
 }
@@ -277,16 +287,16 @@ function _backgroundRun(action, interval)
 {
 	let countdown = Math.ceil(interval / 1000);
 
-	clearInterval(this.intervalCountdown);
-	clearInterval(this.intervalRun);
+	clearInterval(intervalCountdown);
+	clearInterval(intervalRun);
 
 	/* handle interval */
 
-	this.intervalCountdown = setInterval(() =>
+	intervalCountdown = setInterval(() =>
 	{
 		spinner.start(wordingArray.drone_waiting + ' ' + countdown-- + ' ' + wordingArray.seconds + wordingArray.point);
 	}, 1000);
-	this.intervalRun = setInterval(() => run(action), interval);
+	intervalRun = setInterval(() => run(action), interval);
 }
 
 /**
@@ -306,7 +316,7 @@ function run(action)
 		.then(() =>
 		{
 			spinner.start(wordingArray.drone_connected + wordingArray.exclamation_mark);
-			_process(action)
+			process(action)
 				.then(() => backgroundRun ? _backgroundRun(action, backgroundInterval) : spinner.stop())
 				.catch(() => backgroundRun ? _backgroundRun(action, backgroundInterval) : spinner.stop());
 		})
@@ -324,7 +334,6 @@ function run(action)
 function init(initArray)
 {
 	twit = new Twit(initArray);
-	spinner = ora(wordingArray.please_wait + wordingArray.point.repeat(3)).start();
 }
 
 /**
@@ -342,13 +351,15 @@ function construct(dependency)
 	const exports =
 	{
 		init: init,
-		run: run
+		run: run,
+		process: process
 	};
 
 	/* inject dependency */
 
-	if (dependency.option)
+	if (dependency.spinner && dependency.option)
 	{
+		spinner = dependency.spinner;
 		option = dependency.option;
 	}
 	return exports;

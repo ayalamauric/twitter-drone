@@ -4,6 +4,7 @@ const command = require('commander');
 const dotenv = require('dotenv');
 const drone = require('../');
 const core = drone.core;
+const spinner = drone.spinner;
 const option = drone.option;
 const packageArray = require('../package.json');
 
@@ -34,6 +35,7 @@ if (process.env.TWITTER_CONSUMER_KEY &&
 	process.env.TWITTER_ACCESS_TOKEN_SECRET
 )
 {
+	spinner.init();
 	option.init(
 	{
 		searchQuery: command.searchQuery,
@@ -48,6 +50,7 @@ if (process.env.TWITTER_CONSUMER_KEY &&
 	});
 	CORE = new core(
 	{
+		spinner: spinner,
 		option: option
 	});
 	CORE.init(
