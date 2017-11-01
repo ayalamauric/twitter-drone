@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const command = require('commander');
+const program = require('commander');
 const dotenv = require('dotenv');
 const drone = require('../');
 const core = drone.core;
@@ -11,7 +11,7 @@ const packageArray = require('../package.json');
 let action;
 let CORE;
 
-command
+program
 	.version(packageArray.version)
 	.option('-Q, --search-query <search-query>')
 	.option('-T, --search-type <search-type>')
@@ -23,10 +23,10 @@ command
 	.option('-B, --background-run')
 	.option('-D, --dry-run');
 
-command.command('retweet').action(() => action = 'retweet');
-command.command('favorite').action(() => action = 'favorite');
-command.command('follow').action(() => action = 'follow');
-command.parse(process.argv);
+program.command('retweet').action(() => action = 'retweet');
+program.command('favorite').action(() => action = 'favorite');
+program.command('follow').action(() => action = 'follow');
+program.parse(process.argv);
 
 dotenv.config();
 if (process.env.TWITTER_CONSUMER_KEY &&
@@ -38,15 +38,15 @@ if (process.env.TWITTER_CONSUMER_KEY &&
 	spinner.init();
 	option.init(
 	{
-		searchQuery: command.searchQuery,
-		searchType: command.searchType,
-		searchLang: command.searchLang,
-		searchCount: command.searchCount,
-		retweetCount: command.retweetCount,
-		favoriteCount: command.favoriteCount,
-		backgroundInterval: command.backgroundInterval,
-		backgroundRun: command.backgroundRun,
-		dryRun: command.dryRun
+		searchQuery: program.searchQuery,
+		searchType: program.searchType,
+		searchLang: program.searchLang,
+		searchCount: program.searchCount,
+		retweetCount: program.retweetCount,
+		favoriteCount: program.favoriteCount,
+		backgroundInterval: program.backgroundInterval,
+		backgroundRun: program.backgroundRun,
+		dryRun: program.dryRun
 	});
 	CORE = new core(
 	{
