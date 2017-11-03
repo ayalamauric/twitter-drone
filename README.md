@@ -20,7 +20,7 @@ npm install twitter-drone
 Setup
 -----
 
-Define your environment variables inside the `.env` file:
+Create a `.env` file to define your environment variables:
 
 ```
 TWITTER_CONSUMER_KEY=
