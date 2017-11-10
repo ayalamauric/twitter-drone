@@ -28,7 +28,7 @@
 		"TWITTER_TIMEOUT_MS":
 		{
 			"required": true,
-			"value": 60000
+			"value": "60000"
 		}
 	}
 }
