@@ -32,15 +32,15 @@
 		},
 		"RETWEET_COMMAND":
 		{
-			"value": "bin/twitter-drone retweet --search-query=#css --dry-run"
+			"value": "bin/twitter-drone retweet --search-query=#css --search-type=popular"
 		},
 		"FAVORITE_COMMAND":
 		{
-			"value": "bin/twitter-drone favorite --search-query=#css --dry-run"
+			"value": "bin/twitter-drone favorite --search-query=#php --retweet-count=10"
 		},
 		"FOLLOW_COMMAND":
 		{
-			"value": "bin/twitter-drone follow --search-query=#css --dry-run"
+			"value": "bin/twitter-drone follow --search-query=#html --search-type=popular"
 		}
 	},
 	"formation":
