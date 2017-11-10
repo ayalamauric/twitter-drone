@@ -62,19 +62,19 @@ Examples
 Retweet popular `CSS` tweets:
 
 ```
-bin/twitter-drone retweet --search-query=#css --search-type=popular
+bin/twitter-drone retweet --search-query=css --search-type=popular
 ```
 
 Favorite recent `PHP` tweets with at least 10 reweets:
 
 ```
-bin/twitter-drone favorite --search-query=#php --retweet-count=10
+bin/twitter-drone favorite --search-query=php --retweet-count=10
 ```
 
 Follow users of popular `HTML` tweets:
 
 ```
-bin/twitter-drone follow --search-query=#html --search-type=popular
+bin/twitter-drone follow --search-query=html --search-type=popular
 ```
 
 
