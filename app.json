@@ -1,0 +1,34 @@
+{
+	"name": "twitter-drone",
+	"description": "Dead simple bot to automate retweet, favorite and follow on Twitter",
+	"repository": "https://github.com/redaxmedia/twitter-drone",
+	"keywords":
+	[
+		"twitter",
+		"bot"
+	],
+	"env":
+	{
+		"TWITTER_CONSUMER_KEY":
+		{
+			"required": true
+		},
+		"TWITTER_CONSUMER_SECRET":
+		{
+			"required": true
+		},
+		"TWITTER_ACCESS_TOKEN":
+		{
+			"required": true
+		},
+		"TWITTER_ACCESS_TOKEN_SECRET":
+		{
+			"required": true
+		},
+		"TWITTER_TIMEOUT_MS":
+		{
+			"required": true,
+			"value": 60000
+		}
+	}
+}
