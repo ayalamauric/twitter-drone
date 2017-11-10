@@ -37,6 +37,7 @@
 	},
 	"scripts":
 	{
+		"start": "./bin/twitter-drone --dry-run",
 		"lint": "eslint bin src tests",
 		"test": "mocha tests/*Test.js"
 	},
