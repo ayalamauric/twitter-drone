@@ -29,6 +29,18 @@
 		{
 			"required": true,
 			"value": "60000"
+		},
+		"RETWEET_COMMAND":
+		{
+			"value": "bin/twitter-drone retweet --search-query=#css --dry-run"
+		},
+		"FAVORITE_COMMAND":
+		{
+			"value": "bin/twitter-drone favorite --search-query=#css --dry-run"
+		},
+		"FOLLOW_COMMAND":
+		{
+			"value": "bin/twitter-drone follow --search-query=#css --dry-run"
 		}
 	},
 	"formation":
