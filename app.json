@@ -30,5 +30,24 @@
 			"required": true,
 			"value": "60000"
 		}
+	},
+	"formation":
+	{
+		"web":
+		{
+			"quantity": 0
+		},
+		"retweet":
+		{
+			"quantity": 1
+		},
+		"favorite":
+		{
+			"quantity": 0
+		},
+		"follow":
+		{
+			"quantity": 1
+		}
 	}
 }
