@@ -5,8 +5,8 @@ Twitter Drone
 
 [![Build Status](https://img.shields.io/travis/redaxmedia/twitter-drone.svg)](https://travis-ci.org/redaxmedia/twitter-drone)
 [![Dependency Status](https://gemnasium.com/badges/github.com/redaxmedia/twitter-drone.svg)](https://gemnasium.com/github.com/redaxmedia/twitter-drone)
-[![NPM Version](https://img.shields.io/npm/v/twitter-drone.svg)](https://www.npmjs.com/package/twitter-drone)
-[![License](https://img.shields.io/npm/l/twitter-drone.svg)](https://www.npmjs.com/package/twitter-drone)
+[![NPM Version](https://img.shields.io/npm/v/twitter-drone.svg)](https://npmjs.com/package/twitter-drone)
+[![License](https://img.shields.io/npm/l/twitter-drone.svg)](https://npmjs.com/package/twitter-drone)
 [![Deploy Heroku](https://img.shields.io/badge/deploy-heroku-7056bf.svg)](https://heroku.com/deploy?template=https://github.com/redaxmedia/twitter-drone)
 
 
