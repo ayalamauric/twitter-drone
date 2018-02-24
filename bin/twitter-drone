@@ -12,7 +12,7 @@ let action;
 let CORE;
 
 program
-	.version(packageArray.version)
+	.version(packageArray.name + ' ' + packageArray.version)
 	.option('-Q, --search-query <search-query>')
 	.option('-T, --search-type <search-type>')
 	.option('-L, --search-lang <search-lang>')
