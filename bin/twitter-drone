@@ -50,8 +50,8 @@ if (process.env.TWITTER_CONSUMER_KEY &&
 	});
 	CORE = new core(
 	{
-		spinner: spinner,
-		option: option
+		spinner,
+		option
 	});
 	CORE.init(
 	{

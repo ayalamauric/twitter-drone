@@ -350,10 +350,10 @@ function construct(dependency)
 {
 	const exports =
 	{
-		init: init,
-		run: run,
-		process: process,
-		verify: verify
+		init,
+		run,
+		process,
+		verify
 	};
 
 	/* inject dependency */

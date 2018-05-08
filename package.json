@@ -1,7 +1,7 @@
 {
 	"name": "twitter-drone",
 	"description": "Dead simple bot to automate retweet, favorite and follow on Twitter",
-	"version": "1.1.3",
+	"version": "1.1.4",
 	"license": "GPL-3.0",
 	"keywords":
 	[
@@ -24,21 +24,21 @@
 	},
 	"dependencies":
 	{
-		"commander": "2.14.1",
-		"dotenv": "5.0.0",
+		"commander": "2.15.1",
+		"dotenv": "5.0.1",
 		"extend": "3.0.1",
-		"ora": "1.4.0",
+		"ora": "2.1.0",
 		"twit": "2.2.9"
 	},
 	"devDependencies":
 	{
-		"eslint": "4.17.0",
-		"mocha": "5.0.0"
+		"eslint": "4.19.1",
+		"mocha": "5.1.1"
 	},
 	"scripts":
 	{
-		"start": "./bin/twitter-drone --dry-run",
-		"lint": "eslint bin src tests",
+		"start": "bin/twitter-drone --dry-run",
+		"lint": "eslint bin/twitter-drone src tests",
 		"test": "mocha tests/*Test.js"
 	},
 	"bin":

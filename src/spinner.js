@@ -95,11 +95,11 @@ function init(initArray)
 
 module.exports =
 {
-	init: init,
-	start: start,
-	stop: stop,
-	pass: pass,
-	warn: warn,
-	fail: fail,
-	skip: skip
+	init,
+	start,
+	stop,
+	pass,
+	warn,
+	fail,
+	skip
 };

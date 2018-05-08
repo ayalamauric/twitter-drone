@@ -22,8 +22,8 @@ beforeEach(() =>
 		});
 		CORE = new core(
 		{
-			spinner: spinner,
-			option: option
+			spinner,
+			option
 		});
 		CORE.init(
 		{
