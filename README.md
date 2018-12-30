@@ -18,8 +18,16 @@ Preview
 Installation
 ------------
 
+Clone the repository:
+
 ```
-npm install twitter-drone
+git clone https://github.com/redaxmedia/twitter-drone.git
+```
+
+Install the dependencies:
+
+```
+npm install
 ```
 
 
