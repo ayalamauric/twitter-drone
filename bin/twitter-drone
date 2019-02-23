@@ -8,7 +8,7 @@ const spinner = drone.spinner;
 const option = drone.option;
 const packageArray = require('../package.json');
 
-let action;
+let action = null;
 let CORE;
 
 program
@@ -29,8 +29,8 @@ program.command('follow').action(() => action = 'follow');
 program.parse(process.argv);
 
 dotenv.config();
-if (process.env.TWITTER_CONSUMER_KEY &&
-	process.env.TWITTER_CONSUMER_SECRET &&
+if (process.env.TWITTER_API_KEY &&
+	process.env.TWITTER_API_KEY_SECRET &&
 	process.env.TWITTER_ACCESS_TOKEN &&
 	process.env.TWITTER_ACCESS_TOKEN_SECRET
 )
@@ -55,11 +55,10 @@ if (process.env.TWITTER_CONSUMER_KEY &&
 	});
 	CORE.init(
 	{
-		consumer_key: process.env.TWITTER_CONSUMER_KEY,
-		consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+		consumer_key: process.env.TWITTER_API_KEY,
+		consumer_secret: process.env.TWITTER_API_KEY_SECRET,
 		access_token: process.env.TWITTER_ACCESS_TOKEN,
-		access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
-		timeout_ms: process.env.TWITTER_TIMEOUT_MS
+		access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 	});
 	CORE.run(action);
 }

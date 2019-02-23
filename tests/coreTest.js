@@ -9,8 +9,8 @@ let CORE;
 beforeEach(() =>
 {
 	dotenv.config();
-	if (process.env.TWITTER_CONSUMER_KEY &&
-		process.env.TWITTER_CONSUMER_SECRET &&
+	if (process.env.TWITTER_API_KEY &&
+		process.env.TWITTER_API_KEY_SECRET &&
 		process.env.TWITTER_ACCESS_TOKEN &&
 		process.env.TWITTER_ACCESS_TOKEN_SECRET
 	)
@@ -18,6 +18,7 @@ beforeEach(() =>
 		spinner.init();
 		option.init(
 		{
+			searchQuery: 'node',
 			searchCount: 10
 		});
 		CORE = new core(
@@ -27,12 +28,15 @@ beforeEach(() =>
 		});
 		CORE.init(
 		{
-			consumer_key: process.env.TWITTER_CONSUMER_KEY,
-			consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+			consumer_key: process.env.TWITTER_API_KEY,
+			consumer_secret: process.env.TWITTER_API_KEY_SECRET,
 			access_token: process.env.TWITTER_ACCESS_TOKEN,
-			access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
-			timeout_ms: process.env.TWITTER_TIMEOUT_MS
+			access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 		});
+	}
+	else
+	{
+		process.exit(1);
 	}
 });
 
