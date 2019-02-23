@@ -9,11 +9,11 @@
 	],
 	"env":
 	{
-		"TWITTER_CONSUMER_KEY":
+		"TWITTER_API_KEY":
 		{
 			"required": true
 		},
-		"TWITTER_CONSUMER_SECRET":
+		"TWITTER_API_SECRET":
 		{
 			"required": true
 		},
@@ -25,10 +25,9 @@
 		{
 			"required": true
 		},
-		"TWITTER_TIMEOUT_MS":
+		"TWITTER_TIMEOUT":
 		{
-			"required": true,
-			"value": "60000"
+			"value": "600"
 		},
 		"RETWEET_COMMAND":
 		{

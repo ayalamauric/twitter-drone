@@ -1,11 +1,11 @@
 {
-	"searchQuery": "#node",
+	"searchQuery": null,
 	"searchType": "recent",
 	"searchLang": "en",
 	"searchCount": 100,
 	"retweetCount": 0,
 	"favoriteCount": 0,
-	"backgroundInterval": 600000,
+	"backgroundInterval": 600,
 	"backgroundRun": false,
 	"dryRun": false
 }
