@@ -280,12 +280,12 @@ function _dryRun(text)
  * @since 1.0.0
  *
  * @param action string
- * @param interval number
+ * @param backgroundInterval number
  */
 
-function _backgroundRun(action, interval)
+function _backgroundRun(action, backgroundInterval)
 {
-	let countdown = Math.ceil(interval / 1000);
+	let countdown = backgroundInterval;
 
 	clearInterval(intervalCountdown);
 	clearInterval(intervalRun);
@@ -296,7 +296,7 @@ function _backgroundRun(action, interval)
 	{
 		spinner.start(wordingArray.drone_waiting + ' ' + countdown-- + ' ' + wordingArray.seconds + wordingArray.point);
 	}, 1000);
-	intervalRun = setInterval(() => run(action), interval);
+	intervalRun = setInterval(() => run(action), backgroundInterval * 1000);
 }
 
 /**
@@ -310,7 +310,7 @@ function _backgroundRun(action, interval)
 function run(action)
 {
 	const backgroundRun = option.get('backgroundRun');
-	const backgroundInterval = Math.abs(option.get('backgroundInterval'));
+	const backgroundInterval = option.get('backgroundInterval');
 
 	verify()
 		.then(() =>
