@@ -1,1 +1,1 @@
-command: $COMMAND
+worker: $COMMAND

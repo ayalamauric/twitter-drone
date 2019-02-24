@@ -1,9 +1,10 @@
 {
 	"name": "twitter-drone",
-	"description": "Dead simple bot to automate retweet, favorite and follow on Twitter",
+	"description": "JSON stream enhanced bot to automate tweet, retweet, like and follow on Twitter",
 	"repository": "https://github.com/redaxmedia/twitter-drone",
 	"keywords":
 	[
+		"stream",
 		"twitter",
 		"bot"
 	],
@@ -36,7 +37,7 @@
 		{
 			"quantity": 0
 		},
-		"command":
+		"worker":
 		{
 			"quantity": 1
 		}
