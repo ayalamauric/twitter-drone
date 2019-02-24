@@ -1,11 +1,20 @@
 {
-	"searchQuery": null,
-	"searchType": "recent",
-	"searchLang": "en",
-	"searchCount": 100,
-	"retweetCount": 0,
-	"favoriteCount": 0,
-	"backgroundInterval": 600,
-	"backgroundRun": false,
-	"dryRun": false
+	"search":
+	{
+		"query": null,
+		"count": 100,
+		"backgroundInterval": 600,
+		"backgroundRun": false
+	},
+	"list":
+	{
+		"count": 100,
+		"backgroundInterval": 600,
+		"backgroundRun": false
+	},
+	"general":
+	{
+		"undoRun": false,
+		"dryRun": false
+	}
 }

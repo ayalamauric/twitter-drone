@@ -1,7 +1,7 @@
 Twitter Drone
 =============
 
-> Dead simple bot to automate retweet, favorite and follow on Twitter.
+> Data stream enhanced bot to automate tweet, retweet, like and follow on Twitter.
 
 [![Build Status](https://img.shields.io/travis/redaxmedia/twitter-drone.svg)](https://travis-ci.org/redaxmedia/twitter-drone)
 [![NPM Version](https://img.shields.io/npm/v/twitter-drone.svg)](https://npmjs.com/package/twitter-drone)
@@ -50,43 +50,51 @@ Usage
 ```
 bin/twitter-drone [command] [options]
 
-retweet
-favorite
-follow
-
 -V, --version
--Q, --search-query <search-query>
--T, --search-type <search-type>
--L, --search-lang <search-lang>
--S, --search-count <search-count>
--R, --retweet-count <retweet-count>
--F, --favorite-count <favorite-count>
+-h, --help
+
+search [tweet] [user]
+
+-Q, --query <query>
+-C, --count <count>
 -I, --background-interval <background-interval>
 -B, --background-run
+
+list [follower] [friend] [tweet] [like]
+
+-C, --count <count>
+-I, --background-interval <background-interval>
+-B, --background-run
+
+tweet
+retweet
+like
+follow
+
+-U, --undo-run
 -D, --dry-run
--h, --help
 ```
 
 
 Examples
 --------
 
-Retweet popular `CSS` tweets:
+Search for `CSS` tweets and retweet them:
 
 ```
-bin/twitter-drone retweet --search-query=css --search-type=popular
+bin/twitter-drone search tweet --query=css | bin/twitter-drone retweet
 ```
 
-Favorite recent `PHP` tweets with at least 10 reweets:
+Search for `PHP` users and favorite them:
 
 ```
-bin/twitter-drone favorite --search-query=php --retweet-count=10
+bin/twitter-drone search user --query=php | bin/twitter-drone favorite
 ```
 
-Follow users of popular `HTML` tweets:
+Search for users of `HTML` tweets and follow them:
 
 ```
-bin/twitter-drone follow --search-query=html --search-type=popular
+bin/twitter-drone search tweet --query=html | bin/twitter-drone follow
 ```
 
 

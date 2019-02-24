@@ -16,11 +16,7 @@ beforeEach(() =>
 	)
 	{
 		spinner.init();
-		option.init(
-		{
-			searchQuery: 'node',
-			searchCount: 10
-		});
+		option.init();
 		CORE = new core(
 		{
 			spinner,
@@ -42,33 +38,9 @@ beforeEach(() =>
 
 describe('core', () =>
 {
-	it('retweet', done =>
+	it('destroy', done =>
 	{
-		CORE.verify().then(() =>
-		{
-			CORE.process('retweet')
-				.then(() => done())
-				.catch(error => done(error));
-		});
-	});
-
-	it('favorite', done =>
-	{
-		CORE.verify().then(() =>
-		{
-			CORE.process('favorite')
-				.then(() => done())
-				.catch(error => done(error));
-		});
-	});
-
-	it('follow', done =>
-	{
-		CORE.verify().then(() =>
-		{
-			CORE.process('follow')
-				.then(() => done())
-				.catch(error => done(error));
-		});
+		done();
+		spinner.stop();
 	});
 });
