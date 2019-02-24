@@ -1,5 +1,3 @@
-const extend = require('extend');
-
 let optionArray = require('../option.json');
 
 /**
@@ -20,14 +18,18 @@ function get(name)
 /**
  * init
  *
- * @since 1.0.0
+ * @since 2.0.0
  *
  * @param initArray array
  */
 
 function init(initArray)
 {
-	optionArray = extend(optionArray, initArray);
+	optionArray =
+	{
+		...optionArray,
+		...initArray
+	};
 }
 
 module.exports =

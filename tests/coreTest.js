@@ -1,74 +1,134 @@
-const dotenv = require('dotenv');
+const expect = require('chai').expect;
+const exec = require('child_process').exec;
 const drone = require('../');
-const core = drone.core;
-const spinner = drone.spinner;
-const option = drone.option;
-
-let CORE;
+const stream = drone.stream;
+const dotenv = require('dotenv');
 
 beforeEach(() =>
 {
+	stream.init();
 	dotenv.config();
-	if (process.env.TWITTER_API_KEY &&
-		process.env.TWITTER_API_KEY_SECRET &&
-		process.env.TWITTER_ACCESS_TOKEN &&
-		process.env.TWITTER_ACCESS_TOKEN_SECRET
-	)
-	{
-		spinner.init();
-		option.init(
-		{
-			searchQuery: 'node',
-			searchCount: 10
-		});
-		CORE = new core(
-		{
-			spinner,
-			option
-		});
-		CORE.init(
-		{
-			consumer_key: process.env.TWITTER_API_KEY,
-			consumer_secret: process.env.TWITTER_API_KEY_SECRET,
-			access_token: process.env.TWITTER_ACCESS_TOKEN,
-			access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-		});
-	}
-	else
-	{
-		process.exit(1);
-	}
 });
 
 describe('core', () =>
 {
-	it('retweet', done =>
+	it('search-tweet', done =>
 	{
-		CORE.verify().then(() =>
+		exec('bin/twitter-drone search tweet --query=test', (error, stdout) =>
 		{
-			CORE.process('retweet')
-				.then(() => done())
-				.catch(error => done(error));
+			const dataArray = stream.parse(stdout);
+
+			expect(dataArray[0]).to.have.property('count');
+			expect(dataArray[0]).to.have.property('tweetId');
+			expect(dataArray[0]).to.have.property('tweetText');
+			expect(dataArray[0]).to.have.property('userId');
+			expect(dataArray[0]).to.have.property('userName');
+			done();
 		});
 	});
 
-	it('favorite', done =>
+	it('search-user', done =>
 	{
-		CORE.verify().then(() =>
+		exec('bin/twitter-drone search user --query=test', (error, stdout) =>
 		{
-			CORE.process('favorite')
-				.then(() => done())
-				.catch(error => done(error));
+			const dataArray = stream.parse(stdout);
+
+			expect(dataArray[0]).to.have.property('count');
+			expect(dataArray[0]).to.have.property('userId');
+			expect(dataArray[0]).to.have.property('userName');
+			done();
+		});
+	});
+
+	it('list-follower', done =>
+	{
+		exec('bin/twitter-drone list follower', (error, stdout) =>
+		{
+			const dataArray = stream.parse(stdout);
+
+			expect(dataArray[0]).to.have.property('count');
+			expect(dataArray[0]).to.have.property('userId');
+			expect(dataArray[0]).to.have.property('userName');
+			done();
+		});
+	});
+
+	it('list-friend', done =>
+	{
+		exec('bin/twitter-drone list friend', (error, stdout) =>
+		{
+			const dataArray = stream.parse(stdout);
+
+			expect(dataArray[0]).to.have.property('count');
+			expect(dataArray[0]).to.have.property('userId');
+			expect(dataArray[0]).to.have.property('userName');
+			done();
+		});
+	});
+
+	it('list-tweet', done =>
+	{
+		exec('bin/twitter-drone list tweet', (error, stdout) =>
+		{
+			const dataArray = stream.parse(stdout);
+
+			expect(dataArray[0]).to.have.property('count');
+			expect(dataArray[0]).to.have.property('tweetId');
+			expect(dataArray[0]).to.have.property('tweetText');
+			expect(dataArray[0]).to.have.property('userId');
+			expect(dataArray[0]).to.have.property('userName');
+			done();
+		});
+	});
+
+	it('list-like', done =>
+	{
+		exec('bin/twitter-drone list like', (error, stdout) =>
+		{
+			const dataArray = stream.parse(stdout);
+
+			expect(dataArray[0]).to.have.property('count');
+			expect(dataArray[0]).to.have.property('tweetId');
+			expect(dataArray[0]).to.have.property('tweetText');
+			expect(dataArray[0]).to.have.property('userId');
+			expect(dataArray[0]).to.have.property('userName');
+			done();
+		});
+	});
+
+	it('tweet', done =>
+	{
+		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone tweet --dry-run', (error, stdout, stderr) =>
+		{
+			expect(stderr).to.have.length;
+			done();
+		});
+	});
+
+	it('retweet', done =>
+	{
+		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone retweet --dry-run', (error, stdout, stderr) =>
+		{
+			expect(stderr).to.have.length;
+			done();
+		});
+	});
+
+	it('like', done =>
+	{
+		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone like --dry-run', (error, stdout, stderr) =>
+		{
+			expect(stderr).to.have.length;
+			done();
 		});
 	});
 
 	it('follow', done =>
 	{
-		CORE.verify().then(() =>
+		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone follow --dry-run', (error, stdout, stderr) =>
 		{
-			CORE.process('follow')
-				.then(() => done())
-				.catch(error => done(error));
+			expect(stderr).to.have.length;
+			done();
 		});
 	});
 });

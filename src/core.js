@@ -1,277 +1,41 @@
-const Twit = require('twit');
 const wordingArray = require('../wording.json');
 
-let drone =
-{
-	id_str: null,
-	name: null,
-	screen_name: null,
-	description: null,
-	followers_count: null,
-	friends_count: null,
-	statuses_count: null
-};
-let twit;
+let stream;
+let service;
 let spinner;
 let option;
 let intervalCountdown;
 let intervalRun;
 
 /**
- * verify
+ * handle readable stream
  *
- * @since 1.0.0
- *
- * @return Promise
- */
-
-function verify()
-{
-	return new Promise((resolve, reject) =>
-	{
-		twit.get('account/verify_credentials', (error, data) =>
-		{
-			if (error)
-			{
-				reject(error);
-			}
-			else
-			{
-				drone =
-				{
-					id_str: data.id_str,
-					name: data.name,
-					screen_name: data.screen_name,
-					description: data.description,
-					followers_count: data.followers_count,
-					friends_count: data.friends_count,
-					statuses_count: data.statuses_count
-				};
-				resolve();
-			}
-		});
-	});
-}
-
-/**
- * search
- *
- * @since 1.0.0
- *
- * @return Promise
- */
-
-function _search()
-{
-	return twit.get('search/tweets',
-	{
-		q: option.get('searchQuery'),
-		result_type: option.get('searchType'),
-		lang: option.get('searchLang'),
-		count: option.get('searchCount')
-	});
-}
-
-/**
- * retweet
- *
- * @since 1.0.0
- *
- * @param tweetId string
- *
- * @return Promise
- */
-
-function _retweet(tweetId)
-{
-	return new Promise((resolve, reject) =>
-	{
-		twit.post('statuses/retweet/' + tweetId, (error, data) =>
-		{
-			if (error)
-			{
-				spinner.fail(error);
-				reject();
-			}
-			else
-			{
-				spinner.pass(data.text);
-				resolve();
-			}
-		});
-	});
-}
-
-/**
- * favorite
- *
- * @since 1.0.0
- *
- * @param tweetId string
- *
- * @return Promise
- */
-
-function _favorite(tweetId)
-{
-	return new Promise((resolve, reject) =>
-	{
-		twit.post('favorites/create',
-		{
-			id: tweetId
-		}, (error, data) =>
-		{
-			if (error)
-			{
-				spinner.fail(error);
-				reject();
-			}
-			else
-			{
-				spinner.pass(data.text);
-				resolve();
-			}
-		});
-	});
-}
-
-/**
- * follow
- *
- * @since 1.0.0
- *
- * @param userId string
- *
- * @return Promise
- */
-
-function _follow(userId)
-{
-	return new Promise((resolve, reject) =>
-	{
-		twit.post('friendships/create',
-		{
-			id: userId
-		}, (error, data) =>
-		{
-			if (error)
-			{
-				spinner.fail(error);
-				reject();
-			}
-			else
-			{
-				spinner.pass(data.name);
-				resolve();
-			}
-		});
-	});
-}
-
-/**
- * create promise array
- *
- * @since 1.0.0
+ * @since 2.0.0
  *
  * @param action string
- * @param statusArray array
- *
- * @return array
+ * @param optionArray array
  */
 
-function _createPromiseArray(action, statusArray)
+function _handleRead(action, optionArray)
 {
-	const retweetCount = option.get('retweetCount');
-	const favoriteCount = option.get('favoriteCount');
-	const dryRun = option.get('dryRun');
-
-	let promiseArray = [];
-
-	/* process status */
-
-	statusArray.forEach(statusValue =>
-	{
-		if (statusValue.retweet_count >= retweetCount && statusValue.favorite_count >= favoriteCount && statusValue.user.id_str !== drone.id_str)
-		{
-			if (action === 'retweet')
-			{
-				promiseArray.push(dryRun ? _dryRun(statusValue.id_str) : _retweet(statusValue.id_str));
-			}
-			if (action === 'favorite')
-			{
-				promiseArray.push(dryRun ? _dryRun(statusValue.id_str) : _favorite(statusValue.id_str));
-			}
-			if (action === 'follow')
-			{
-				promiseArray.push(dryRun ? _dryRun(statusValue.user.id_str) : _follow(statusValue.user.id_str));
-			}
-		}
-	});
-	return promiseArray;
+	optionArray.backgroundRun ? _backgroundRun(action, optionArray) : spinner.stop();
 }
 
 /**
- * unique by
+ * handle writeable stream
  *
- * @since 1.0.0
+ * @since 2.0.0
  *
- * @param rawArray array
- * @param key string
- *
- * @return Promise
+ * @param data object
+ * @param callback function
+ * @param optionArray array
  */
 
-function _uniqueBy(rawArray, key)
+function _handleWrite(data, callback, optionArray)
 {
-	return rawArray.filter((first, index) => rawArray.findIndex(second => first[key] === second[key]) === index);
-}
-
-/**
- * process
- *
- * @since 1.0.0
- *
- * @param action string
- *
- * @return Promise
- */
-
-function process(action)
-{
-	return new Promise((resolve, reject) =>
-	{
-		_search()
-			.then(response =>
-			{
-				const statusArray = _uniqueBy(response.data && response.data.statuses ? response.data.statuses : [], 'text');
-				const promiseArray = _createPromiseArray(action, statusArray);
-
-				Promise
-					.all(promiseArray)
-					.then(() => resolve())
-					.catch(error => reject(error));
-			})
-			.catch(error => reject(error));
-	});
-}
-
-/**
- * dry run
- *
- * @since 1.0.0
- *
- * @param text string
- *
- * @return Promise
- */
-
-function _dryRun(text)
-{
-	return new Promise(resolve =>
-	{
-		spinner.skip(text);
-		resolve();
-	});
+	optionArray.dryRun ? _dryRun(data) : callback(data, optionArray)
+		.then(data => spinner.pass(JSON.stringify(data)))
+		.catch(error => spinner.warn(error));
 }
 
 /**
@@ -280,12 +44,12 @@ function _dryRun(text)
  * @since 1.0.0
  *
  * @param action string
- * @param backgroundInterval number
+ * @param optionArray array
  */
 
-function _backgroundRun(action, backgroundInterval)
+function _backgroundRun(action, optionArray)
 {
-	let countdown = backgroundInterval;
+	let countdown = optionArray.backgroundInterval;
 
 	clearInterval(intervalCountdown);
 	clearInterval(intervalRun);
@@ -296,7 +60,22 @@ function _backgroundRun(action, backgroundInterval)
 	{
 		spinner.start(wordingArray.drone_waiting + ' ' + countdown-- + ' ' + wordingArray.seconds + wordingArray.point);
 	}, 1000);
-	intervalRun = setInterval(() => run(action), backgroundInterval * 1000);
+	intervalRun = setInterval(() => run(action), optionArray.backgroundInterval * 1000);
+}
+
+/**
+ * dry run
+ *
+ * @since 1.0.0
+ *
+ * @param data string
+ *
+ * @return Promise
+ */
+
+function _dryRun(data)
+{
+	spinner.skip(JSON.stringify(data));
 }
 
 /**
@@ -309,16 +88,102 @@ function _backgroundRun(action, backgroundInterval)
 
 function run(action)
 {
-	const backgroundRun = option.get('backgroundRun');
-	const backgroundInterval = option.get('backgroundInterval');
-
-	verify()
+	service.verify()
 		.then(() =>
 		{
 			spinner.start(wordingArray.drone_connected + wordingArray.exclamation_mark);
-			process(action)
-				.then(() => backgroundRun ? _backgroundRun(action, backgroundInterval) : spinner.stop())
-				.catch(() => backgroundRun ? _backgroundRun(action, backgroundInterval) : spinner.stop());
+			if (action === 'search-tweet')
+			{
+				service
+					.searchTweet(option.get('search'))
+					.then(data =>
+					{
+						stream.pipe(data);
+						_handleRead(action, option.get('search'));
+					})
+					.catch(error => spinner.fail(error));
+			}
+			else if (action === 'search-user')
+			{
+				service
+					.searchUser(option.get('search'))
+					.then(data =>
+					{
+						stream.pipe(data);
+						_handleRead(action, option.get('search'));
+					})
+					.catch(error => spinner.fail(error));
+			}
+			else if (action === 'list-follower')
+			{
+				service
+					.listFollower(option.get('list'))
+					.then(data =>
+					{
+						stream.pipe(data);
+						_handleRead(action, option.get('list'));
+					})
+					.catch(error => spinner.fail(error));
+			}
+			else if (action === 'list-friend')
+			{
+				service
+					.listFriend(option.get('list'))
+					.then(data =>
+					{
+						stream.pipe(data);
+						_handleRead(action, option.get('list'));
+					})
+					.catch(error => spinner.fail(error));
+			}
+			else if (action === 'list-tweet')
+			{
+				service
+					.listTweet(option.get('list'))
+					.then(data =>
+					{
+						stream.pipe(data);
+						_handleRead(action, option.get('list'));
+					})
+					.catch(error => spinner.fail(error));
+			}
+			else if (action === 'list-like')
+			{
+				service
+					.listLike(option.get('list'))
+					.then(data =>
+					{
+						stream.pipe(data);
+						_handleRead(action, option.get('list'));
+					})
+					.catch(error => spinner.fail(error));
+			}
+			else
+			{
+				const optionArray = option.get('general');
+
+				process.stdin.on('data', data =>
+				{
+					const dataArray = stream.parse(data);
+
+					if (action === 'tweet')
+					{
+						dataArray.map(data => _handleWrite(data, service.tweet, optionArray));
+					}
+					if (action === 'retweet')
+					{
+						dataArray.map(data => _handleWrite(data, service.retweet, optionArray));
+					}
+					if (action === 'like')
+					{
+						dataArray.map(data => _handleWrite(data, service.like, optionArray));
+					}
+					if (action === 'follow')
+					{
+						dataArray.map(data => _handleWrite(data, service.like, optionArray));
+					}
+				});
+			}
 		})
 		.catch(error => spinner.fail(error));
 }
@@ -326,14 +191,14 @@ function run(action)
 /**
  * init
  *
- * @since 1.0.0
+ * @since 2.0.0
  *
  * @param initArray array
  */
 
 function init(initArray)
 {
-	twit = new Twit(initArray);
+	service.init(initArray);
 }
 
 /**
@@ -351,15 +216,15 @@ function construct(injector)
 	const exports =
 	{
 		init,
-		run,
-		process,
-		verify
+		run
 	};
 
 	/* handle injector */
 
-	if (injector.spinner && injector.option)
+	if (injector.service && injector.stream && injector.spinner && injector.option)
 	{
+		service = injector.service;
+		stream = injector.stream;
 		spinner = injector.spinner;
 		option = injector.option;
 	}

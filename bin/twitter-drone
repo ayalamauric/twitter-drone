@@ -4,6 +4,8 @@ const program = require('commander');
 const dotenv = require('dotenv');
 const drone = require('../');
 const core = drone.core;
+const service = drone.service;
+const stream = drone.stream;
 const spinner = drone.spinner;
 const option = drone.option;
 const packageArray = require('../package.json');
@@ -11,21 +13,90 @@ const packageArray = require('../package.json');
 let action = null;
 let CORE;
 
+program.version(packageArray.name + ' ' + packageArray.version);
 program
-	.version(packageArray.name + ' ' + packageArray.version)
-	.option('-Q, --search-query <search-query>')
-	.option('-T, --search-type <search-type>')
-	.option('-L, --search-lang <search-lang>')
-	.option('-S, --search-count <search-count>')
-	.option('-R, --retweet-count <retweet-count>')
-	.option('-F, --favorite-count <favorite-count>')
+	.command('search <type>')
+	.option('-Q, --query <query>')
+	.option('-C, --count <count>')
 	.option('-I, --background-interval <background-interval>')
 	.option('-B, --background-run')
-	.option('-D, --dry-run');
-
-program.command('retweet').action(() => action = 'retweet');
-program.command('favorite').action(() => action = 'favorite');
-program.command('follow').action(() => action = 'follow');
+	.action((command, options) =>
+	{
+		if (command === 'tweet')
+		{
+			action = 'search-tweet';
+		}
+		if (command === 'user')
+		{
+			action = 'search-user';
+		}
+		option.init(
+		{
+			search:
+			{
+				query: options.query || option.get('search').query,
+				count: options.count || option.get('search').count,
+				backgroundInterval: options.backgroundInterval || option.get('search').backgroundInterval,
+				backgroundRun: options.backgroundRun || option.get('search').backgroundRun
+			}
+		});
+	});
+program
+	.command('list <type>')
+	.option('-C, --count <count>')
+	.option('-I, --background-interval <background-interval>')
+	.option('-B, --background-run')
+	.action((command, options) =>
+	{
+		if (command === 'follower')
+		{
+			action = 'list-follower';
+		}
+		if (command === 'friend')
+		{
+			action = 'list-friend';
+		}
+		if (command === 'tweet')
+		{
+			action = 'list-tweet';
+		}
+		if (command === 'like')
+		{
+			action = 'list-like';
+		}
+		option.init(
+		{
+			list:
+			{
+				count: options.count || option.get('list').count,
+				backgroundInterval: options.backgroundInterval || option.get('list').backgroundInterval,
+				backgroundRun: options.backgroundRun || option.get('list').backgroundRun
+			}
+		});
+	});
+[
+	'tweet',
+	'retweet',
+	'like',
+	'follow'
+]
+.map(command => program
+	.command(command)
+	.option('-U, --undo-run')
+	.option('-D, --dry-run')
+	.action(options =>
+	{
+		action = command;
+		option.init(
+		{
+			general:
+			{
+				dryRun: options.dryRun || option.get('general').dryRun,
+				undoRun: options.undoRun || option.get('general').undoRun
+			}
+		});
+	})
+);
 program.parse(process.argv);
 
 dotenv.config();
@@ -35,21 +106,12 @@ if (process.env.TWITTER_API_KEY &&
 	process.env.TWITTER_ACCESS_TOKEN_SECRET
 )
 {
+	stream.init();
 	spinner.init();
-	option.init(
-	{
-		searchQuery: program.searchQuery,
-		searchType: program.searchType,
-		searchLang: program.searchLang,
-		searchCount: program.searchCount,
-		retweetCount: program.retweetCount,
-		favoriteCount: program.favoriteCount,
-		backgroundInterval: program.backgroundInterval,
-		backgroundRun: program.backgroundRun,
-		dryRun: program.dryRun
-	});
 	CORE = new core(
 	{
+		service,
+		stream,
 		spinner,
 		option
 	});
