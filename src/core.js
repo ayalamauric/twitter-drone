@@ -5,6 +5,7 @@ const wordingArray = require('../wording.json');
 
 let twit;
 let stream;
+let service;
 let spinner;
 let option;
 let intervalCountdown;
@@ -36,22 +37,7 @@ function _verify()
 	});
 }
 
-/**
- * search the tweet
- *
- * @since 2.0.0
- *
- * @return Promise
- */
 
-function _searchTweet()
-{
-	return twit.get('search/tweets',
-	{
-		q: option.get('search').query,
-		count: option.get('search').query
-	});
-}
 
 /**
  * search the user
@@ -356,20 +342,10 @@ function run(action)
 			spinner.start(wordingArray.drone_connected + wordingArray.exclamation_mark);
 			if (action === 'search-tweet')
 			{
-				_searchTweet()
-					.then(response =>
+				service.searchTweet(option.get('search'))
+					.then(data =>
 					{
-						const dataArray = response.data && response.data.statuses ? response.data.statuses : [];
-						let counter = 0;
-
-						dataArray.map(status => stream.push(JSON.stringify(
-						{
-							count: counter++,
-							tweetId: status.id_str,
-							tweetText: status.text,
-							userId: status.user.id_str,
-							userName: status.user.name
-						}) + os.EOL));
+						data.map(status => stream.push(JSON.stringify(status) + os.EOL));
 						stream.pipe(process.stdout);
 
 						const backgroundRun = option.get('search').backgroundRun;
@@ -573,6 +549,7 @@ function run(action)
 
 function init(initArray)
 {
+	service.init(initArray);
 	twit = new Twit(initArray);
 	stream = new Stream.PassThrough();
 }
@@ -599,6 +576,7 @@ function construct(injector)
 
 	if (injector.spinner && injector.option)
 	{
+		service = injector.service;
 		spinner = injector.spinner;
 		option = injector.option;
 	}

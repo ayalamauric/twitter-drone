@@ -4,6 +4,7 @@ const program = require('commander');
 const dotenv = require('dotenv');
 const drone = require('../');
 const core = drone.core;
+const service = drone.service;
 const spinner = drone.spinner;
 const option = drone.option;
 const packageArray = require('../package.json');
@@ -148,6 +149,7 @@ if (process.env.TWITTER_API_KEY &&
 	spinner.init();
 	CORE = new core(
 	{
+		service,
 		spinner,
 		option
 	});
