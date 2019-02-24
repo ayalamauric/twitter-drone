@@ -131,11 +131,14 @@ describe('service', () =>
 		});
 	});
 
-	it('tweet', done =>
+	it.skip('tweet', done =>
 	{
 		service.tweet(
 		{
 			tweetText: 'test'
+		},
+		{
+			undoRun: false
 		})
 		.then(data =>
 		{
@@ -147,7 +150,7 @@ describe('service', () =>
 		});
 	});
 
-	it('(un)tweet', done =>
+	it.skip('(un)tweet', done =>
 	{
 		service.tweet(
 		{
@@ -166,11 +169,14 @@ describe('service', () =>
 		});
 	});
 
-	it('retweet', done =>
+	it.skip('retweet', done =>
 	{
 		service.retweet(
 		{
 			tweetId: 0
+		},
+		{
+			undoRun: false
 		})
 		.then(data =>
 		{
@@ -182,7 +188,7 @@ describe('service', () =>
 		});
 	});
 
-	it('(un)retweet', done =>
+	it.skip('(un)retweet', done =>
 	{
 		service.tweet(
 		{
@@ -201,11 +207,14 @@ describe('service', () =>
 		});
 	});
 
-	it('like', done =>
+	it.skip('like', done =>
 	{
 		service.like(
 		{
 			tweetId: 0
+		},
+		{
+			undoRun: false
 		})
 		.then(data =>
 		{
@@ -217,7 +226,7 @@ describe('service', () =>
 		});
 	});
 
-	it('(un)like', done =>
+	it.skip('(un)like', done =>
 	{
 		service.like(
 		{
@@ -236,11 +245,14 @@ describe('service', () =>
 		});
 	});
 
-	it('follow', done =>
+	it.skip('follow', done =>
 	{
 		service.follow(
 		{
 			userId: 0
+		},
+		{
+			undoRun: false
 		})
 		.then(data =>
 		{
@@ -250,7 +262,7 @@ describe('service', () =>
 		});
 	});
 
-	it('(un)follow', done =>
+	it.skip('(un)follow', done =>
 	{
 		service.follow(
 		{

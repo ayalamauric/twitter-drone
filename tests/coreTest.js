@@ -96,7 +96,7 @@ describe('core', () =>
 		});
 	});
 
-	it('tweet', done =>
+	it.skip('tweet', done =>
 	{
 		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone tweet --dry-run', (error, stdout, stderr) =>
 		{
@@ -105,7 +105,7 @@ describe('core', () =>
 		});
 	});
 
-	it('retweet', done =>
+	it.skip('retweet', done =>
 	{
 		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone retweet --dry-run', (error, stdout, stderr) =>
 		{
@@ -114,7 +114,7 @@ describe('core', () =>
 		});
 	});
 
-	it('like', done =>
+	it.skip('like', done =>
 	{
 		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone like --dry-run', (error, stdout, stderr) =>
 		{
@@ -123,7 +123,7 @@ describe('core', () =>
 		});
 	});
 
-	it('follow', done =>
+	it.skip('follow', done =>
 	{
 		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone follow --dry-run', (error, stdout, stderr) =>
 		{
