@@ -3,7 +3,6 @@ const Stream = require('stream');
 const os = require('os');
 const wordingArray = require('../wording.json');
 
-let drone;
 let twit;
 let stream;
 let spinner;
@@ -23,7 +22,7 @@ function _verify()
 {
 	return new Promise((resolve, reject) =>
 	{
-		twit.get('account/verify_credentials', (error, data) =>
+		twit.get('account/verify_credentials', error =>
 		{
 			if (error)
 			{
@@ -31,15 +30,6 @@ function _verify()
 			}
 			else
 			{
-				drone =
-				{
-					userId: data.id_str,
-					userName: data.name,
-					description: data.description,
-					followerCount: data.followers_count,
-					friendCount: data.friends_count,
-					tweetCount: data.statuses_count
-				};
 				resolve();
 			}
 		});
@@ -123,22 +113,6 @@ function _listFriend()
 function _listTweet()
 {
 	return twit.get('statuses/user_timeline',
-	{
-		count: option.get('list').count
-	});
-}
-
-/**
- * list the retweet
- *
- * @since 2.0.0
- *
- * @return Promise
- */
-
-function _listRetweet()
-{
-	return twit.get('statuses/retweets_of_me',
 	{
 		count: option.get('list').count
 	});
@@ -513,7 +487,6 @@ function run(action)
 						}) + os.EOL));
 						stream.pipe(process.stdout);
 
-
 						const backgroundRun = option.get('list').backgroundRun;
 						const backgroundInterval = option.get('list').backgroundInterval;
 
@@ -534,7 +507,7 @@ function run(action)
 						{
 							if (data.tweetId && data.tweetText)
 							{
-								dryRun ? spinner.skip(data.tweetId) : _tweet(data.tweetId, data.tweetText);
+								dryRun ? _dryRun(data.tweetId) : _tweet(data.tweetId, data.tweetText);
 							}
 							else
 							{
@@ -548,7 +521,7 @@ function run(action)
 						{
 							if (data.tweetId)
 							{
-								dryRun ? spinner.skip(data.tweetId) : _retweet(data.tweetId);
+								dryRun ? _dryRun(data.tweetId) : _retweet(data.tweetId);
 							}
 							else
 							{
@@ -562,7 +535,7 @@ function run(action)
 						{
 							if (data.tweetId)
 							{
-								dryRun ? spinner.skip(data.tweetId) : _like(data.tweetId);
+								dryRun ? _dryRun(data.tweetId) : _like(data.tweetId);
 							}
 							else
 							{
@@ -576,7 +549,7 @@ function run(action)
 						{
 							if (data.userId)
 							{
-								dryRun ? spinner.skip(data.userId) : _follow(data.tweetId);
+								dryRun ? _dryRun(data.userId) : _follow(data.tweetId);
 							}
 							else
 							{
