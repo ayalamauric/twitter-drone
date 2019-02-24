@@ -30,6 +30,29 @@ function _mapTweet(data)
 }
 
 /**
+ * reduce the tweet
+ *
+ * @since 2.0.0
+ *
+ * @param data array
+ *
+ * @return array
+ */
+
+function _reduceTweet(data)
+{
+	const result =
+	{
+		tweetId: data.id_str,
+		tweetText: data.text,
+		userId: data.user.id_str,
+		userName: data.user.name
+	};
+
+	return result;
+}
+
+/**
  * map the user
  *
  * @since 2.0.0
@@ -55,6 +78,27 @@ function _mapUser(data)
 }
 
 /**
+ * reduce the user
+ *
+ * @since 2.0.0
+ *
+ * @param data array
+ *
+ * @return array
+ */
+
+function _reduceUser(data)
+{
+	const result =
+	{
+		userId: data.id_str,
+		userName: data.name
+	};
+
+	return result;
+}
+
+/**
  * verify
  *
  * @since 2.0.0
@@ -64,21 +108,13 @@ function _mapUser(data)
 
 function verify()
 {
-	return twit.get('account/verify_credentials')
+	return twit
+		.get('account/verify_credentials')
 		.then(response =>
 		{
 			return response.data ? response.data : {};
 		})
-		.then(data =>
-		{
-			const result =
-			{
-				userId: data.id_str,
-				userName: data.name
-			};
-
-			return result;
-		});
+		.then(data => _reduceUser(data));
 }
 
 /**
@@ -93,16 +129,17 @@ function verify()
 
 function searchTweet(optionArray)
 {
-	return twit.get('search/tweets',
-	{
-		q: optionArray.query,
-		count: optionArray.count
-	})
-	.then(response =>
-	{
-		return response.data && response.data.statuses ? response.data.statuses : {};
-	})
-	.then(data => _mapTweet(data));
+	return twit
+		.get('search/tweets',
+		{
+			q: optionArray.query,
+			count: optionArray.count
+		})
+		.then(response =>
+		{
+			return response.data && response.data.statuses ? response.data.statuses : {};
+		})
+		.then(data => _mapTweet(data));
 }
 
 /**
@@ -117,16 +154,17 @@ function searchTweet(optionArray)
 
 function searchUser(optionArray)
 {
-	return twit.get('users/search',
-	{
-		q: optionArray.query,
-		count: optionArray.count
-	})
-	.then(response =>
-	{
-		return response.data ? response.data : {};
-	})
-	.then(data => _mapUser(data));
+	return twit
+		.get('users/search',
+		{
+			q: optionArray.query,
+			count: optionArray.count
+		})
+		.then(response =>
+		{
+			return response.data ? response.data : {};
+		})
+		.then(data => _mapUser(data));
 }
 
 /**
@@ -141,15 +179,16 @@ function searchUser(optionArray)
 
 function listFollower(optionArray)
 {
-	return twit.get('followers/list',
-	{
-		count: optionArray.count
-	})
-	.then(response =>
-	{
-		return response.data && response.data.users ? response.data.users : {};
-	})
-	.then(data => _mapUser(data));
+	return twit
+		.get('followers/list',
+		{
+			count: optionArray.count
+		})
+		.then(response =>
+		{
+			return response.data && response.data.users ? response.data.users : {};
+		})
+		.then(data => _mapUser(data));
 }
 
 /**
@@ -164,15 +203,16 @@ function listFollower(optionArray)
 
 function listFriend(optionArray)
 {
-	return twit.get('friends/list',
-	{
-		count: optionArray.count
-	})
-	.then(response =>
-	{
-		return response.data && response.data.users ? response.data.users : {};
-	})
-	.then(data => _mapUser(data));
+	return twit
+		.get('friends/list',
+		{
+			count: optionArray.count
+		})
+		.then(response =>
+		{
+			return response.data && response.data.users ? response.data.users : {};
+		})
+		.then(data => _mapUser(data));
 }
 
 /**
@@ -187,15 +227,16 @@ function listFriend(optionArray)
 
 function listTweet(optionArray)
 {
-	return twit.get('statuses/user_timeline',
-	{
-		count: optionArray.count
-	})
-	.then(response =>
-	{
-		return response.data ? response.data : {};
-	})
-	.then(data => _mapTweet(data));
+	return twit
+		.get('statuses/user_timeline',
+		{
+			count: optionArray.count
+		})
+		.then(response =>
+		{
+			return response.data ? response.data : {};
+		})
+		.then(data => _mapTweet(data));
 }
 
 /**
@@ -210,15 +251,159 @@ function listTweet(optionArray)
 
 function listLike(optionArray)
 {
-	return twit.get('favorites/list',
+	return twit
+		.get('favorites/list',
+		{
+			count: optionArray.count
+		})
+		.then(response =>
+		{
+			return response.data ? response.data : {};
+		})
+		.then(data => _mapTweet(data));
+}
+
+/**
+ * tweet
+ *
+ * @since 2.0.0
+ *
+ * @param data array
+ * @param optionArray array
+ *
+ * @return Promise
+ */
+
+function tweet(data, optionArray)
+{
+	if (optionArray.undoRun)
 	{
-		count: optionArray.count
-	})
-	.then(response =>
+		return twit
+			.post('statuses/destroy/' + data.tweetId)
+			.then(response =>
+			{
+				return response.data ? response.data : {};
+			})
+			.then(data => _reduceTweet(data));
+	}
+	return twit
+		.post('statuses/update',
+		{
+			status: data.tweetText
+		})
+		.then(response =>
+		{
+			return response.data ? response.data : {};
+		})
+		.then(data => _reduceTweet(data));
+}
+
+/**
+ * retweet
+ *
+ * @since 2.0.0
+ *
+ * @param data array
+ * @param optionArray array
+ *
+ * @return Promise
+ */
+
+function retweet(data, optionArray)
+{
+	if (optionArray.undoRun)
 	{
-		return response.data ? response.data : {};
-	})
-	.then(data => _mapTweet(data));
+		return twit
+			.post('statuses/unretweet/' + data.tweetId)
+			.then(response =>
+			{
+				return response.data ? response.data : {};
+			})
+			.then(data => _reduceTweet(data));
+	}
+	return twit
+		.post('statuses/retweet/' + data.tweetId)
+		.then(response =>
+		{
+			return response.data ? response.data : {};
+		})
+		.then(data => _reduceTweet(data));
+}
+
+/**
+ * like
+ *
+ * @since 2.0.0
+ *
+ * @param data array
+ * @param optionArray array
+ *
+ * @return Promise
+ */
+
+function like(data, optionArray)
+{
+	if (optionArray.undoRun)
+	{
+		return twit
+			.post('favorites/destroy',
+			{
+				id: data.tweetId
+			})
+			.then(response =>
+			{
+				return response.data ? response.data : {};
+			})
+			.then(data => _reduceTweet(data));
+	}
+	return twit
+		.post('favorites/create',
+		{
+			id: data.tweetId
+		})
+		.then(response =>
+		{
+			return response.data ? response.data : {};
+		})
+		.then(data => _reduceTweet(data));
+}
+
+/**
+ * follow
+ *
+ * @since 2.0.0
+ *
+ * @param data array
+ * @param optionArray array
+ *
+ * @return Promise
+ */
+
+function follow(data, optionArray)
+{
+	if (optionArray.undoRun)
+	{
+		return twit
+			.post('friendships/destroy',
+			{
+				id: data.userId
+			})
+			.then(response =>
+			{
+				return response.data ? response.data : {};
+			})
+			.then(data => _reduceUser(data));
+	}
+	return twit
+		.post('friendships/create',
+		{
+			id: data.userId
+		})
+		.then(response =>
+		{
+			return response.data ? response.data : {};
+		})
+		.then(data => _reduceUser(data));
 }
 
 /**
@@ -243,5 +428,9 @@ module.exports =
 	listFriend,
 	listTweet,
 	listLike,
+	tweet,
+	retweet,
+	like,
+	follow,
 	init
 };

@@ -27,8 +27,7 @@ describe('service', () =>
 				expect(data).to.have.property('userName');
 				done();
 			});
-	})
-	.timeout(5000);
+	});
 
 	it('search-tweet', done =>
 	{
@@ -47,8 +46,7 @@ describe('service', () =>
 			expect(data).to.have.length(1);
 			done();
 		});
-	})
-	.timeout(5000);
+	});
 
 	it('search-user', done =>
 	{
@@ -65,8 +63,7 @@ describe('service', () =>
 			expect(data).to.have.length(1);
 			done();
 		});
-	})
-	.timeout(5000);
+	});
 
 	it('list-follower', done =>
 	{
@@ -82,8 +79,7 @@ describe('service', () =>
 			expect(data).to.have.length(1);
 			done();
 		});
-	})
-	.timeout(5000);
+	});
 
 	it('list-friend', done =>
 	{
@@ -99,8 +95,7 @@ describe('service', () =>
 			expect(data).to.have.length(1);
 			done();
 		});
-	})
-	.timeout(5000);
+	});
 
 	it('list-tweet', done =>
 	{
@@ -116,8 +111,7 @@ describe('service', () =>
 			expect(data).to.have.length(1);
 			done();
 		});
-	})
-	.timeout(5000);
+	});
 
 	it('list-like', done =>
 	{
@@ -135,6 +129,141 @@ describe('service', () =>
 			expect(data).to.have.length(1);
 			done();
 		});
-	})
-	.timeout(5000);
+	});
+
+	it('tweet', done =>
+	{
+		service.tweet(
+		{
+			tweetText: 'test'
+		})
+		.then(data =>
+		{
+			expect(data).to.have.property('tweetId');
+			expect(data).to.have.property('tweetText');
+			expect(data).to.have.property('userId');
+			expect(data).to.have.property('userName');
+			done();
+		});
+	});
+
+	it('(un)tweet', done =>
+	{
+		service.tweet(
+		{
+			tweetId: 0
+		},
+		{
+			undoRun: true
+		})
+		.then(data =>
+		{
+			expect(data).to.have.property('tweetId');
+			expect(data).to.have.property('tweetText');
+			expect(data).to.have.property('userId');
+			expect(data).to.have.property('userName');
+			done();
+		});
+	});
+
+	it('retweet', done =>
+	{
+		service.retweet(
+		{
+			tweetId: 0
+		})
+		.then(data =>
+		{
+			expect(data).to.have.property('tweetId');
+			expect(data).to.have.property('tweetText');
+			expect(data).to.have.property('userId');
+			expect(data).to.have.property('userName');
+			done();
+		});
+	});
+
+	it('(un)retweet', done =>
+	{
+		service.tweet(
+		{
+			tweetId: 0
+		},
+		{
+			undoRun: true
+		})
+		.then(data =>
+		{
+			expect(data).to.have.property('tweetId');
+			expect(data).to.have.property('tweetText');
+			expect(data).to.have.property('userId');
+			expect(data).to.have.property('userName');
+			done();
+		});
+	});
+
+	it('like', done =>
+	{
+		service.like(
+		{
+			tweetId: 0
+		})
+		.then(data =>
+		{
+			expect(data).to.have.property('tweetId');
+			expect(data).to.have.property('tweetText');
+			expect(data).to.have.property('userId');
+			expect(data).to.have.property('userName');
+			done();
+		});
+	});
+
+	it('(un)like', done =>
+	{
+		service.like(
+		{
+			tweetId: 0
+		},
+		{
+			undoRun: true
+		})
+		.then(data =>
+		{
+			expect(data).to.have.property('tweetId');
+			expect(data).to.have.property('tweetText');
+			expect(data).to.have.property('userId');
+			expect(data).to.have.property('userName');
+			done();
+		});
+	});
+
+	it('follow', done =>
+	{
+		service.follow(
+		{
+			userId: 0
+		})
+		.then(data =>
+		{
+			expect(data).to.have.property('userId');
+			expect(data).to.have.property('userName');
+			done();
+		});
+	});
+
+	it('(un)follow', done =>
+	{
+		service.follow(
+		{
+			userId: 0
+		},
+		{
+			undoRun: true
+		})
+		.then(data =>
+		{
+			expect(data).to.have.property('userId');
+			expect(data).to.have.property('userName');
+			done();
+		});
+	});
 });

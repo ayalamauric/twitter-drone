@@ -1,9 +1,5 @@
-const Twit = require('twit');
-const Stream = require('stream');
-const os = require('os');
 const wordingArray = require('../wording.json');
 
-let twit;
 let stream;
 let service;
 let spinner;
@@ -12,184 +8,7 @@ let intervalCountdown;
 let intervalRun;
 
 /**
- * tweet
- *
- * @since 2.0.0
- *
- * @param tweetId string
- * @param tweetText string
- *
- * @return Promise
- */
-
-function _tweet(tweetId, tweetText)
-{
-	return new Promise((resolve, reject) =>
-	{
-		if (option.get('general').undoRun)
-		{
-			twit.post('statuses/destroy/' + tweetId, (error, data) =>
-			{
-				if (error)
-				{
-					spinner.fail(error);
-					reject();
-				}
-				else
-				{
-					spinner.pass(data.text);
-					resolve();
-				}
-			});
-		}
-		else
-		{
-			twit.post( 'statuses/update',
-				{
-					status: tweetText
-				}, (error, data) =>
-				{
-					if (error)
-					{
-						spinner.fail(error);
-						reject();
-					}
-					else
-					{
-						spinner.pass(data.text);
-						resolve();
-					}
-				});
-		}
-	});
-}
-
-/**
- * retweet
- *
- * @since 2.0.0
- *
- * @param tweetId string
- *
- * @return Promise
- */
-
-function _retweet(tweetId)
-{
-	return new Promise((resolve, reject) =>
-	{
-		twit.post(option.get('general').undoRun ? 'statuses/unretweet/' + tweetId : 'statuses/retweet/' + tweetId, (error, data) =>
-		{
-			if (error)
-			{
-				spinner.fail(error);
-				reject();
-			}
-			else
-			{
-				spinner.pass(data.text);
-				resolve();
-			}
-		});
-	});
-}
-
-/**
- * like
- *
- * @since 2.0.0
- *
- * @param tweetId string
- *
- * @return Promise
- */
-
-function _like(tweetId)
-{
-	return new Promise((resolve, reject) =>
-	{
-		twit.post(option.get('general').undoRun ? 'favorites/destroy' : 'favorites/create',
-		{
-			id: tweetId
-		}, (error, data) =>
-		{
-			if (error)
-			{
-				spinner.fail(error);
-				reject();
-			}
-			else
-			{
-				spinner.pass(data.text);
-				resolve();
-			}
-		});
-	});
-}
-
-/**
- * follow
- *
- * @since 2.0.0
- *
- * @param userId string
- * @param userId string
- *
- * @return Promise
- */
-
-function _follow(userId)
-{
-	return new Promise((resolve, reject) =>
-	{
-		twit.post(option.get('general').undoRun ? 'friendships/destroy' : 'friendships/create',
-		{
-			id: userId
-		}, (error, data) =>
-		{
-			if (error)
-			{
-				spinner.fail(error);
-				reject();
-			}
-			else
-			{
-				spinner.pass(data.name);
-				resolve();
-			}
-		});
-	});
-}
-
-/**
- * pipe the data
- *
- * @since 2.0.0
- *
- * @return object
- */
-
-function _pipeData(data)
-{
-	data.map(item => stream.push(JSON.stringify(item) + os.EOL));
-	stream.pipe(process.stdout);
-}
-
-/**
- * parse from the stream
- *
- * @since 2.0.0
- *
- * @return object
- */
-
-function _parseStream(data)
-{
-	return data.toString('utf8').split(os.EOL).map(item => item ? JSON.parse(item) : null).filter(item => item);
-}
-
-/**
- * handle the read stream
+ * handle readable stream
  *
  * @since 2.0.0
  *
@@ -203,17 +22,20 @@ function _handleRead(action, optionArray)
 }
 
 /**
- * handle the write stream
+ * handle writeable stream
  *
  * @since 2.0.0
  *
- * @param action string
+ * @param data object
+ * @param callback function
  * @param optionArray array
  */
 
-function _handleWrite(action, optionArray)
+function _handleWrite(data, callback, optionArray)
 {
-	optionArray.dryRun ? _dryRun(action) : spinner.stop();
+	optionArray.dryRun ? _dryRun(data) : callback(data, optionArray)
+		.then(data => spinner.pass(JSON.stringify(data)))
+		.catch(error => spinner.warn(error));
 }
 
 /**
@@ -246,18 +68,14 @@ function _backgroundRun(action, optionArray)
  *
  * @since 1.0.0
  *
- * @param action string
+ * @param data string
  *
  * @return Promise
  */
 
-function _dryRun(action)
+function _dryRun(data)
 {
-	return new Promise(resolve =>
-	{
-		spinner.skip(action);
-		resolve();
-	});
+	spinner.skip(JSON.stringify(data));
 }
 
 /**
@@ -280,7 +98,7 @@ function run(action)
 					.searchTweet(option.get('search'))
 					.then(data =>
 					{
-						_pipeData(data);
+						stream.pipe(data);
 						_handleRead(action, option.get('search'));
 					})
 					.catch(error => spinner.fail(error));
@@ -291,7 +109,7 @@ function run(action)
 					.searchUser(option.get('search'))
 					.then(data =>
 					{
-						_pipeData(data);
+						stream.pipe(data);
 						_handleRead(action, option.get('search'));
 					})
 					.catch(error => spinner.fail(error));
@@ -302,7 +120,7 @@ function run(action)
 					.listFollower(option.get('list'))
 					.then(data =>
 					{
-						_pipeData(data);
+						stream.pipe(data);
 						_handleRead(action, option.get('list'));
 					})
 					.catch(error => spinner.fail(error));
@@ -313,7 +131,7 @@ function run(action)
 					.listFriend(option.get('list'))
 					.then(data =>
 					{
-						_pipeData(data);
+						stream.pipe(data);
 						_handleRead(action, option.get('list'));
 					})
 					.catch(error => spinner.fail(error));
@@ -324,7 +142,7 @@ function run(action)
 					.listTweet(option.get('list'))
 					.then(data =>
 					{
-						_pipeData(data);
+						stream.pipe(data);
 						_handleRead(action, option.get('list'));
 					})
 					.catch(error => spinner.fail(error));
@@ -335,73 +153,34 @@ function run(action)
 					.listLike(option.get('list'))
 					.then(data =>
 					{
-						_pipeData(data);
+						stream.pipe(data);
 						_handleRead(action, option.get('list'));
 					})
 					.catch(error => spinner.fail(error));
 			}
 			else
 			{
+				const optionArray = option.get('general');
+
 				process.stdin.on('data', data =>
 				{
-					const dataArray = _parseStream(data);
-					const dryRun = option.get('general').dryRun;
+					const dataArray = stream.parse(data);
 
 					if (action === 'tweet')
 					{
-						dataArray.map(data =>
-						{
-							if (data.tweetId && data.tweetText)
-							{
-								dryRun ? _dryRun(data.tweetId) : _tweet(data.tweetId, data.tweetText);
-							}
-							else
-							{
-								spinner.warn(wordingArray.tweet_no)
-							}
-						});
+						dataArray.map(data => _handleWrite(data, service.tweet, optionArray));
 					}
 					if (action === 'retweet')
 					{
-						dataArray.map(data =>
-						{
-							if (data.tweetId)
-							{
-								dryRun ? _dryRun(data.tweetId) : _retweet(data.tweetId);
-							}
-							else
-							{
-								spinner.warn(wordingArray.tweet_no)
-							}
-						});
+						dataArray.map(data => _handleWrite(data, service.retweet, optionArray));
 					}
 					if (action === 'like')
 					{
-						dataArray.map(data =>
-						{
-							if (data.tweetId)
-							{
-								dryRun ? _dryRun(data.tweetId) : _like(data.tweetId);
-							}
-							else
-							{
-								spinner.warn(wordingArray.tweet_no)
-							}
-						});
+						dataArray.map(data => _handleWrite(data, service.like, optionArray));
 					}
 					if (action === 'follow')
 					{
-						dataArray.map(data =>
-						{
-							if (data.userId)
-							{
-								dryRun ? _dryRun(data.userId) : _follow(data.tweetId);
-							}
-							else
-							{
-								spinner.warn(wordingArray.user_no)
-							}
-						});
+						dataArray.map(data => _handleWrite(data, service.like, optionArray));
 					}
 				});
 			}
@@ -420,8 +199,6 @@ function run(action)
 function init(initArray)
 {
 	service.init(initArray);
-	twit = new Twit(initArray);
-	stream = new Stream.PassThrough();
 }
 
 /**
@@ -444,9 +221,10 @@ function construct(injector)
 
 	/* handle injector */
 
-	if (injector.spinner && injector.option)
+	if (injector.service && injector.stream && injector.spinner && injector.option)
 	{
 		service = injector.service;
+		stream = injector.stream;
 		spinner = injector.spinner;
 		option = injector.option;
 	}

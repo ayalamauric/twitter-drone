@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const drone = require('../');
 const core = drone.core;
 const service = drone.service;
+const stream = drone.stream;
 const spinner = drone.spinner;
 const option = drone.option;
 const packageArray = require('../package.json');
@@ -73,13 +74,19 @@ program
 			}
 		});
 	});
-program
-	.command('tweet')
+[
+	'tweet',
+	'retweet',
+	'like',
+	'follow'
+]
+.map(command => program
+	.command(command)
 	.option('-U, --undo-run')
 	.option('-D, --dry-run')
 	.action(options =>
 	{
-		action = 'tweet';
+		action = command;
 		option.init(
 		{
 			general:
@@ -88,55 +95,8 @@ program
 				undoRun: options.undoRun || option.get('general').undoRun
 			}
 		});
-	});
-program
-	.command('retweet')
-	.option('-U, --undo-run')
-	.option('-D, --dry-run')
-	.action(options =>
-	{
-		action = 'retweet';
-		option.init(
-		{
-			general:
-			{
-				dryRun: options.dryRun || option.get('general').dryRun,
-				undoRun: options.undoRun || option.get('general').undoRun
-			}
-		});
-	});
-program
-	.command('like')
-	.option('-U, --undo-run')
-	.option('-D, --dry-run')
-	.action(options =>
-	{
-		action = 'like';
-		option.init(
-		{
-			general:
-			{
-				dryRun: options.dryRun || option.get('general').dryRun,
-				undoRun: options.undoRun || option.get('general').undoRun
-			}
-		});
-	});
-program
-	.command('follow')
-	.option('-U, --undo-run')
-	.option('-D, --dry-run')
-	.action(options =>
-	{
-		action = 'follow';
-		option.init(
-		{
-			general:
-			{
-				dryRun: options.dryRun || option.get('general').dryRun,
-				undoRun: options.undoRun || option.get('general').undoRun
-			}
-		});
-	});
+	})
+);
 program.parse(process.argv);
 
 dotenv.config();
@@ -146,10 +106,12 @@ if (process.env.TWITTER_API_KEY &&
 	process.env.TWITTER_ACCESS_TOKEN_SECRET
 )
 {
+	stream.init();
 	spinner.init();
 	CORE = new core(
 	{
 		service,
+		stream,
 		spinner,
 		option
 	});
