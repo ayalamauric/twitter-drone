@@ -1,3 +1,1 @@
-retweet: $RETWEET_COMMAND
-favorite: $FAVORITE_COMMAND
-follow: $FOLLOW_COMMAND
+command: $COMMAND
