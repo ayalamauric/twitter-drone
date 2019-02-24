@@ -42,4 +42,22 @@ describe('service', () =>
 		});
 	})
 	.timeout(5000);
+
+	it('search-user', done =>
+	{
+		service.searchUser(
+		{
+			query: 'test',
+			count: 1
+		})
+		.then(data =>
+		{
+			expect(data).to.not.have.property('count');
+			expect(data).to.not.have.property('userId');
+			expect(data).to.not.have.property('userName');
+			expect(data).to.have.length(1);
+			done();
+		});
+	})
+	.timeout(5000);
 });

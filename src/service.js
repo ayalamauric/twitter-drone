@@ -34,24 +34,61 @@ function searchTweet(optionArray)
 	})
 	.then(response =>
 	{
-		return response.data && response.data.statuses ? response.data.statuses : []
+		return response.data && response.data.statuses ? response.data.statuses : [];
 	})
 	.then(data =>
 	{
-		return data.map((statusValue, statusIndex) =>
+		return data.map((itemValue, itemIndex) =>
 		{
-			const status =
+			const item =
 			{
-				count: statusIndex,
-				tweetId: statusValue.id_str,
-				tweetText: statusValue.text,
-				userId: statusValue.user.id_str,
-				userName: statusValue.user.name
+				count: itemIndex,
+				tweetId: itemValue.id_str,
+				tweetText: itemValue.text,
+				userId: itemValue.user.id_str,
+				userName: itemValue.user.name
 			};
 
-			return status;
+			return item;
 		});
 	})
+}
+
+/**
+ * search the user
+ *
+ * @since 2.0.0
+ *
+ * @param optionArray array
+ *
+ * @return Promise
+ */
+
+function searchUser(optionArray)
+{
+	return twit.get('users/search',
+	{
+		q: optionArray.query,
+		count: optionArray.count
+	})
+	.then(response =>
+	{
+		return response.data ? response.data : [];
+	})
+	.then(data =>
+	{
+		return data.map((itemValue, itemIndex) =>
+		{
+			const item =
+			{
+				count: itemIndex,
+				userId: itemValue.id_str,
+				userName: itemValue.name
+			};
+
+			return item;
+		});
+	});
 }
 
 /**
@@ -71,5 +108,6 @@ module.exports =
 {
 	verify,
 	searchTweet,
+	searchUser,
 	init
 };

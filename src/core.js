@@ -12,23 +12,6 @@ let intervalCountdown;
 let intervalRun;
 
 /**
- * search the user
- *
- * @since 2.0.0
- *
- * @return Promise
- */
-
-function _searchUser()
-{
-	return twit.get('users/search',
-	{
-		q: option.get('search').query,
-		count: option.get('search').query
-	});
-}
-
-/**
  * list the follower
  *
  * @since 2.0.0
@@ -343,34 +326,23 @@ function run(action)
 			spinner.start(wordingArray.drone_connected + wordingArray.exclamation_mark);
 			if (action === 'search-tweet')
 			{
-				service.searchTweet(option.get('search'))
+				service
+					.searchTweet(option.get('search'))
 					.then(data =>
 					{
 						_pipeData(data);
-						_handleAction('search-tweet', option.get('search'));
+						_handleAction(action, option.get('search'));
 					})
 					.catch(error => spinner.fail(error));
 			}
 			else if (action === 'search-user')
 			{
-				_searchUser()
-					.then(response =>
+				service
+					.searchUser(option.get('search'))
+					.then(data =>
 					{
-						const dataArray = response.data ? response.data : [];
-						let counter = 0;
-
-						dataArray.map(user => stream.push(JSON.stringify(
-						{
-							count: counter++,
-							userId: user.id_str,
-							userName: user.name
-						}) + os.EOL));
-						stream.pipe(process.stdout);
-
-						const backgroundRun = option.get('search').backgroundRun;
-						const backgroundInterval = option.get('search').backgroundInterval;
-
-						backgroundRun ? _backgroundRun('search-user', backgroundInterval) : spinner.stop();
+						_pipeData(data);
+						_handleAction(action, option.get('search'));
 					})
 					.catch(error => spinner.fail(error));
 			}
