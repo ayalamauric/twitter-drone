@@ -12,70 +12,6 @@ let intervalCountdown;
 let intervalRun;
 
 /**
- * list the follower
- *
- * @since 2.0.0
- *
- * @return Promise
- */
-
-function _listFollower()
-{
-	return twit.get('followers/list',
-	{
-		count: option.get('list').count
-	});
-}
-
-/**
- * list the friend
- *
- * @since 2.0.0
- *
- * @return Promise
- */
-
-function _listFriend()
-{
-	return twit.get('friends/list',
-	{
-		count: option.get('list').count
-	});
-}
-
-/**
- * list the tweet
- *
- * @since 2.0.0
- *
- * @return Promise
- */
-
-function _listTweet()
-{
-	return twit.get('statuses/user_timeline',
-	{
-		count: option.get('list').count
-	});
-}
-
-/**
- * list the like
- *
- * @since 2.0.0
- *
- * @return Promise
- */
-
-function _listLike()
-{
-	return twit.get('favorites/list',
-	{
-		count: option.get('list').count
-	});
-}
-
-/**
  * tweet
  *
  * @since 2.0.0
@@ -253,7 +189,7 @@ function _parseStream(data)
 }
 
 /**
- * handle the action
+ * handle the read stream
  *
  * @since 2.0.0
  *
@@ -261,9 +197,23 @@ function _parseStream(data)
  * @param optionArray array
  */
 
-function _handleAction(action, optionArray)
+function _handleRead(action, optionArray)
 {
 	optionArray.backgroundRun ? _backgroundRun(action, optionArray) : spinner.stop();
+}
+
+/**
+ * handle the write stream
+ *
+ * @since 2.0.0
+ *
+ * @param action string
+ * @param optionArray array
+ */
+
+function _handleWrite(action, optionArray)
+{
+	optionArray.dryRun ? _dryRun(action) : spinner.stop();
 }
 
 /**
@@ -296,16 +246,16 @@ function _backgroundRun(action, optionArray)
  *
  * @since 1.0.0
  *
- * @param text string
+ * @param action string
  *
  * @return Promise
  */
 
-function _dryRun(text)
+function _dryRun(action)
 {
 	return new Promise(resolve =>
 	{
-		spinner.skip(text);
+		spinner.skip(action);
 		resolve();
 	});
 }
@@ -331,7 +281,7 @@ function run(action)
 					.then(data =>
 					{
 						_pipeData(data);
-						_handleAction(action, option.get('search'));
+						_handleRead(action, option.get('search'));
 					})
 					.catch(error => spinner.fail(error));
 			}
@@ -342,99 +292,51 @@ function run(action)
 					.then(data =>
 					{
 						_pipeData(data);
-						_handleAction(action, option.get('search'));
+						_handleRead(action, option.get('search'));
 					})
 					.catch(error => spinner.fail(error));
 			}
 			else if (action === 'list-follower')
 			{
-				_listFollower()
-					.then(response =>
+				service
+					.listFollower(option.get('list'))
+					.then(data =>
 					{
-						const dataArray = response.data && response.data.users ? response.data.users : [];
-						let counter = 0;
-
-						dataArray.map(user => stream.push(JSON.stringify(
-						{
-							count: counter++,
-							userId: user.id_str,
-							userName: user.name
-						}) + os.EOL));
-						stream.pipe(process.stdout);
-
-						const backgroundRun = option.get('list').backgroundRun;
-						const backgroundInterval = option.get('list').backgroundInterval;
-
-						backgroundRun ? _backgroundRun('list-follower', backgroundInterval) : spinner.stop();
+						_pipeData(data);
+						_handleRead(action, option.get('list'));
 					})
 					.catch(error => spinner.fail(error));
 			}
 			else if (action === 'list-friend')
 			{
-				_listFriend()
-					.then(response =>
+				service
+					.listFriend(option.get('list'))
+					.then(data =>
 					{
-						const dataArray = response.data && response.data.users ? response.data.users : [];
-						let counter = 0;
-
-						dataArray.map(user => stream.push(JSON.stringify(
-							{
-								count: counter++,
-								userId: user.id_str,
-								userName: user.name
-							}) + os.EOL));
-						stream.pipe(process.stdout);
-
-						const backgroundRun = option.get('list').backgroundRun;
-						const backgroundInterval = option.get('list').backgroundInterval;
-
-						backgroundRun ? _backgroundRun('list-friend', backgroundInterval) : spinner.stop();
+						_pipeData(data);
+						_handleRead(action, option.get('list'));
 					})
 					.catch(error => spinner.fail(error));
 			}
 			else if (action === 'list-tweet')
 			{
-				_listTweet()
-					.then(response =>
+				service
+					.listTweet(option.get('list'))
+					.then(data =>
 					{
-						const dataArray = response.data ? response.data : [];
-						let counter = 0;
-
-						dataArray.map(status => stream.push(JSON.stringify(
-							{
-								count: counter++,
-								tweetId: status.id_str,
-								tweetText: status.text,
-							}) + os.EOL));
-						stream.pipe(process.stdout);
-
-						const backgroundRun = option.get('list').backgroundRun;
-						const backgroundInterval = option.get('list').backgroundInterval;
-
-						backgroundRun ? _backgroundRun('list-tweet', backgroundInterval) : spinner.stop();
+						_pipeData(data);
+						_handleRead(action, option.get('list'));
 					})
 					.catch(error => spinner.fail(error));
 			}
 			else if (action === 'list-like')
 			{
-				_listLike()
-					.then(response =>
+				service
+					.listLike(option.get('list'))
+					.then(data =>
 					{
-						const dataArray = response.data ? response.data : [];
-						let counter = 0;
-
-						dataArray.map(status => stream.push(JSON.stringify(
-						{
-							count: counter++,
-							tweetId: status.id_str,
-							tweetText: status.text,
-						}) + os.EOL));
-						stream.pipe(process.stdout);
-
-						const backgroundRun = option.get('list').backgroundRun;
-						const backgroundInterval = option.get('list').backgroundInterval;
-
-						backgroundRun ? _backgroundRun('list-like', backgroundInterval) : spinner.stop();
+						_pipeData(data);
+						_handleRead(action, option.get('list'));
 					})
 					.catch(error => spinner.fail(error));
 			}

@@ -19,7 +19,14 @@ describe('service', () =>
 {
 	it('verify', done =>
 	{
-		service.verify().then(() => done());
+		service
+			.verify()
+			.then(data =>
+			{
+				expect(data).to.have.property('userId');
+				expect(data).to.have.property('userName');
+				done();
+			});
 	})
 	.timeout(5000);
 
@@ -32,11 +39,11 @@ describe('service', () =>
 		})
 		.then(data =>
 		{
-			expect(data).to.not.have.property('count');
-			expect(data).to.not.have.property('tweetId');
-			expect(data).to.not.have.property('tweetText');
-			expect(data).to.not.have.property('userId');
-			expect(data).to.not.have.property('userName');
+			expect(data[0]).to.have.property('count');
+			expect(data[0]).to.have.property('tweetId');
+			expect(data[0]).to.have.property('tweetText');
+			expect(data[0]).to.have.property('userId');
+			expect(data[0]).to.have.property('userName');
 			expect(data).to.have.length(1);
 			done();
 		});
@@ -52,9 +59,79 @@ describe('service', () =>
 		})
 		.then(data =>
 		{
-			expect(data).to.not.have.property('count');
-			expect(data).to.not.have.property('userId');
-			expect(data).to.not.have.property('userName');
+			expect(data[0]).to.have.property('count');
+			expect(data[0]).to.have.property('userId');
+			expect(data[0]).to.have.property('userName');
+			expect(data).to.have.length(1);
+			done();
+		});
+	})
+	.timeout(5000);
+
+	it('list-follower', done =>
+	{
+		service.listFollower(
+		{
+			count: 1
+		})
+		.then(data =>
+		{
+			expect(data[0]).to.have.property('count');
+			expect(data[0]).to.have.property('userId');
+			expect(data[0]).to.have.property('userName');
+			expect(data).to.have.length(1);
+			done();
+		});
+	})
+	.timeout(5000);
+
+	it('list-friend', done =>
+	{
+		service.listFriend(
+		{
+			count: 1
+		})
+		.then(data =>
+		{
+			expect(data[0]).to.have.property('count');
+			expect(data[0]).to.have.property('userId');
+			expect(data[0]).to.have.property('userName');
+			expect(data).to.have.length(1);
+			done();
+		});
+	})
+	.timeout(5000);
+
+	it('list-tweet', done =>
+	{
+		service.listTweet(
+		{
+			count: 1
+		})
+		.then(data =>
+		{
+			expect(data[0]).to.have.property('count');
+			expect(data[0]).to.have.property('tweetId');
+			expect(data[0]).to.have.property('tweetText');
+			expect(data).to.have.length(1);
+			done();
+		});
+	})
+	.timeout(5000);
+
+	it('list-like', done =>
+	{
+		service.listLike(
+		{
+			count: 1
+		})
+		.then(data =>
+		{
+			expect(data[0]).to.have.property('count');
+			expect(data[0]).to.have.property('tweetId');
+			expect(data[0]).to.have.property('tweetText');
+			expect(data[0]).to.have.property('userId');
+			expect(data[0]).to.have.property('userName');
 			expect(data).to.have.length(1);
 			done();
 		});
