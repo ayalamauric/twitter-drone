@@ -81,22 +81,22 @@ follow
 Examples
 --------
 
-Search for `CSS` tweets and retweet them:
+Search for `CSS` related tweets and retweet them:
 
 ```
 bin/twitter-drone search tweet --query=css | bin/twitter-drone retweet
 ```
 
-Search for `PHP` users and favorite them:
+Search for `HTML` related users and follow them:
 
 ```
-bin/twitter-drone search user --query=php | bin/twitter-drone favorite
+bin/twitter-drone search user --query=html | bin/twitter-drone follow
 ```
 
-Search for users of `HTML` tweets and follow them:
+List your likes and unlike them:
 
 ```
-bin/twitter-drone search tweet --query=html | bin/twitter-drone follow
+bin/twitter-drone list like | bin/twitter-drone like --undo-run
 ```
 
 

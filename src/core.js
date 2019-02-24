@@ -180,7 +180,7 @@ function run(action)
 					}
 					if (action === 'follow')
 					{
-						dataArray.map(data => _handleWrite(data, service.like, optionArray));
+						dataArray.map(data => _handleWrite(data, service.follow, optionArray));
 					}
 				});
 			}
