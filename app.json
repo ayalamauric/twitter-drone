@@ -36,15 +36,7 @@
 		{
 			"quantity": 0
 		},
-		"retweet":
-		{
-			"quantity": 1
-		},
-		"favorite":
-		{
-			"quantity": 0
-		},
-		"follow":
+		"command":
 		{
 			"quantity": 1
 		}
