@@ -1,7 +1,7 @@
 Twitter Drone
 =============
 
-> Data stream enhanced bot to automate tweet, retweet, like and follow on Twitter.
+> JSON stream enhanced bot to automate tweet, retweet, like and follow on Twitter.
 
 [![Build Status](https://img.shields.io/travis/redaxmedia/twitter-drone.svg)](https://travis-ci.org/redaxmedia/twitter-drone)
 [![NPM Version](https://img.shields.io/npm/v/twitter-drone.svg)](https://npmjs.com/package/twitter-drone)
@@ -46,6 +46,8 @@ TWITTER_ACCESS_TOKEN_SECRET=
 
 Usage
 -----
+
+Combine readable streams `search` and `list` with writable streams `tweet`, `retweet`, `like` and `follow`:
 
 ```
 bin/twitter-drone [command] [options]
