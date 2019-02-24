@@ -3,6 +3,19 @@ const Twit = require('twit');
 let twit;
 
 /**
+ * verify
+ *
+ * @since 2.0.0
+ *
+ * @return Promise
+ */
+
+function verify()
+{
+	return twit.get('account/verify_credentials');
+}
+
+/**
  * search the tweet
  *
  * @since 2.0.0
@@ -56,6 +69,7 @@ function init(initArray)
 
 module.exports =
 {
+	verify,
 	searchTweet,
 	init
 };

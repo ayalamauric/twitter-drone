@@ -12,34 +12,6 @@ let intervalCountdown;
 let intervalRun;
 
 /**
- * verify
- *
- * @since 2.0.0
- *
- * @return Promise
- */
-
-function _verify()
-{
-	return new Promise((resolve, reject) =>
-	{
-		twit.get('account/verify_credentials', error =>
-		{
-			if (error)
-			{
-				reject(error);
-			}
-			else
-			{
-				resolve();
-			}
-		});
-	});
-}
-
-
-
-/**
  * search the user
  *
  * @since 2.0.0
@@ -242,6 +214,7 @@ function _like(tweetId)
  * @since 2.0.0
  *
  * @param userId string
+ * @param userId string
  *
  * @return Promise
  */
@@ -270,7 +243,21 @@ function _follow(userId)
 }
 
 /**
- * parse the stream
+ * pipe the data
+ *
+ * @since 2.0.0
+ *
+ * @return object
+ */
+
+function _pipeData(data)
+{
+	data.map(item => stream.push(JSON.stringify(item) + os.EOL));
+	stream.pipe(process.stdout);
+}
+
+/**
+ * parse from the stream
  *
  * @since 2.0.0
  *
@@ -283,17 +270,31 @@ function _parseStream(data)
 }
 
 /**
+ * handle the action
+ *
+ * @since 2.0.0
+ *
+ * @param action string
+ * @param optionArray array
+ */
+
+function _handleAction(action, optionArray)
+{
+	optionArray.backgroundRun ? _backgroundRun(action, optionArray) : spinner.stop();
+}
+
+/**
  * background run
  *
  * @since 1.0.0
  *
  * @param action string
- * @param backgroundInterval number
+ * @param optionArray array
  */
 
-function _backgroundRun(action, backgroundInterval)
+function _backgroundRun(action, optionArray)
 {
-	let countdown = backgroundInterval;
+	let countdown = optionArray.backgroundInterval;
 
 	clearInterval(intervalCountdown);
 	clearInterval(intervalRun);
@@ -304,7 +305,7 @@ function _backgroundRun(action, backgroundInterval)
 	{
 		spinner.start(wordingArray.drone_waiting + ' ' + countdown-- + ' ' + wordingArray.seconds + wordingArray.point);
 	}, 1000);
-	intervalRun = setInterval(() => run(action), backgroundInterval * 1000);
+	intervalRun = setInterval(() => run(action), optionArray.backgroundInterval * 1000);
 }
 
 /**
@@ -336,7 +337,7 @@ function _dryRun(text)
 
 function run(action)
 {
-	_verify()
+	service.verify()
 		.then(() =>
 		{
 			spinner.start(wordingArray.drone_connected + wordingArray.exclamation_mark);
@@ -345,13 +346,8 @@ function run(action)
 				service.searchTweet(option.get('search'))
 					.then(data =>
 					{
-						data.map(status => stream.push(JSON.stringify(status) + os.EOL));
-						stream.pipe(process.stdout);
-
-						const backgroundRun = option.get('search').backgroundRun;
-						const backgroundInterval = option.get('search').backgroundInterval;
-
-						backgroundRun ? _backgroundRun('search-tweet', backgroundInterval) : spinner.stop();
+						_pipeData(data);
+						_handleAction('search-tweet', option.get('search'));
 					})
 					.catch(error => spinner.fail(error));
 			}

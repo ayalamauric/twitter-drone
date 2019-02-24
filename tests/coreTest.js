@@ -13,10 +13,7 @@ describe('core', () =>
 	{
 		exec('bin/twitter-drone search tweet --query=test', (error, stdout) =>
 		{
-			expect(stdout).to.match(/tweetId/);
-			expect(stdout).to.match(/tweetText/);
-			expect(stdout).to.match(/userId/);
-			expect(stdout).to.match(/userName/);
+			expect(stdout).to.match(/test/);
 			done();
 		});
 	})
