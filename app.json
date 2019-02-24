@@ -14,7 +14,7 @@
 		{
 			"required": true
 		},
-		"TWITTER_API_SECRET":
+		"TWITTER_API_KEY_SECRET":
 		{
 			"required": true
 		},
