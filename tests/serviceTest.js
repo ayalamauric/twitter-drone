@@ -144,106 +144,176 @@ describe('service', () =>
 		});
 	});
 
-	it.skip('(un)tweet', done =>
+	it('(un)tweet', done =>
 	{
 		service.tweet(
 		{
-			tweetId: 0
-		},
-		{
-			undoRun: true
-		})
-		.then(data =>
-		{
-			expect(data).to.have.property('tweetId');
-			expect(data).to.have.property('tweetText');
-			expect(data).to.have.property('userId');
-			expect(data).to.have.property('userName');
-			done();
-		});
-	});
-
-	it.skip('retweet', done =>
-	{
-		service.retweet(
-		{
-			tweetId: 0
+			tweetText: Date.now()
 		},
 		{
 			undoRun: false
 		})
 		.then(data =>
 		{
-			expect(data).to.have.property('tweetId');
-			expect(data).to.have.property('tweetText');
-			expect(data).to.have.property('userId');
-			expect(data).to.have.property('userName');
-			done();
+			service.tweet(
+			{
+				tweetId: data.tweetId
+			},
+			{
+				undoRun: true
+			})
+			.then(data =>
+			{
+				expect(data).to.have.property('tweetId');
+				expect(data).to.have.property('tweetText');
+				expect(data).to.have.property('userId');
+				expect(data).to.have.property('userName');
+				done();
+			});
 		});
 	});
 
-	it.skip('(un)retweet', done =>
+	it('retweet', done =>
 	{
 		service.tweet(
 		{
-			tweetId: 0
-		},
-		{
-			undoRun: true
-		})
-		.then(data =>
-		{
-			expect(data).to.have.property('tweetId');
-			expect(data).to.have.property('tweetText');
-			expect(data).to.have.property('userId');
-			expect(data).to.have.property('userName');
-			done();
-		});
-	});
-
-	it.skip('like', done =>
-	{
-		service.like(
-		{
-			tweetId: 0
+			tweetText: Date.now()
 		},
 		{
 			undoRun: false
 		})
 		.then(data =>
 		{
-			expect(data).to.have.property('tweetId');
-			expect(data).to.have.property('tweetText');
-			expect(data).to.have.property('userId');
-			expect(data).to.have.property('userName');
-			done();
+			service.retweet(
+			{
+				tweetId: data.tweetId
+			},
+			{
+				undoRun: false
+			})
+			.then(data =>
+			{
+				expect(data).to.have.property('tweetId');
+				expect(data).to.have.property('tweetText');
+				expect(data).to.have.property('userId');
+				expect(data).to.have.property('userName');
+				done();
+			});
 		});
 	});
 
-	it.skip('(un)like', done =>
+	it('(un)retweet', done =>
 	{
-		service.like(
+		service.tweet(
 		{
-			tweetId: 0
+			tweetText: Date.now()
 		},
 		{
-			undoRun: true
+			undoRun: false
 		})
 		.then(data =>
 		{
-			expect(data).to.have.property('tweetId');
-			expect(data).to.have.property('tweetText');
-			expect(data).to.have.property('userId');
-			expect(data).to.have.property('userName');
-			done();
+			service.retweet(
+			{
+				tweetId: data.tweetId
+			},
+			{
+				undoRun: false
+			})
+			.then(data =>
+			{
+				service.retweet(
+				{
+					tweetId: data.tweetId
+				},
+				{
+					undoRun: true
+				})
+				.then(data =>
+				{
+					expect(data).to.have.property('tweetId');
+					expect(data).to.have.property('tweetText');
+					expect(data).to.have.property('userId');
+					expect(data).to.have.property('userName');
+					done();
+				});
+			});
 		});
 	});
 
-	it.skip('follow', done =>
+	it('like', done =>
+	{
+		service.tweet(
+		{
+			tweetText: Date.now()
+		},
+		{
+			undoRun: false
+		})
+		.then(data =>
+		{
+			service.like(
+			{
+				tweetId: data.tweetId
+			},
+			{
+				undoRun: false
+			})
+			.then(data =>
+			{
+				expect(data).to.have.property('tweetId');
+				expect(data).to.have.property('tweetText');
+				expect(data).to.have.property('userId');
+				expect(data).to.have.property('userName');
+				done();
+			});
+		});
+	});
+
+	it('(un)like', done =>
+	{
+		service.tweet(
+		{
+			tweetText: Date.now()
+		},
+		{
+			undoRun: false
+		})
+		.then(data =>
+		{
+			service.like(
+			{
+				tweetId: data.tweetId
+			},
+			{
+				undoRun: false
+			})
+			.then(data =>
+			{
+				service.like(
+				{
+					tweetId: data.tweetId
+				},
+				{
+					undoRun: true
+				})
+				.then(data =>
+				{
+					expect(data).to.have.property('tweetId');
+					expect(data).to.have.property('tweetText');
+					expect(data).to.have.property('userId');
+					expect(data).to.have.property('userName');
+					done();
+				});
+			});
+		});
+	});
+
+	it('follow', done =>
 	{
 		service.follow(
 		{
-			userId: 0
+			userId: 59739125
 		},
 		{
 			undoRun: false
@@ -256,11 +326,11 @@ describe('service', () =>
 		});
 	});
 
-	it.skip('(un)follow', done =>
+	it('(un)follow', done =>
 	{
 		service.follow(
 		{
-			userId: 0
+			userId: 59739125
 		},
 		{
 			undoRun: true

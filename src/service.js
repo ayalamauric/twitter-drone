@@ -22,7 +22,7 @@ function _mapTweet(data)
 			tweetId: dataValue.id_str,
 			tweetText: dataValue.text,
 			userId: dataValue.user.id_str,
-			userName: dataValue.user.name
+			userName: dataValue.user.screen_name
 		};
 
 		return result;
@@ -46,7 +46,7 @@ function _reduceTweet(data)
 		tweetId: data.id_str,
 		tweetText: data.text,
 		userId: data.user.id_str,
-		userName: data.user.name
+		userName: data.user.screen_name
 	};
 
 	return result;
@@ -70,7 +70,7 @@ function _mapUser(data)
 		{
 			count: dataIndex,
 			userId: dataValue.id_str,
-			userName: dataValue.name
+			userName: dataValue.screen_name
 		};
 
 		return result;
@@ -92,7 +92,7 @@ function _reduceUser(data)
 	const result =
 	{
 		userId: data.id_str,
-		userName: data.name
+		userName: data.screen_name
 	};
 
 	return result;
