@@ -34,7 +34,7 @@ describe('service', () =>
 		service.searchTweet(
 		{
 			query: 'test',
-			count: 1
+			count: 10
 		})
 		.then(data =>
 		{
@@ -43,7 +43,6 @@ describe('service', () =>
 			expect(data[0]).to.have.property('tweetText');
 			expect(data[0]).to.have.property('userId');
 			expect(data[0]).to.have.property('userName');
-			expect(data).to.have.length(1);
 			done();
 		});
 	});
@@ -53,14 +52,13 @@ describe('service', () =>
 		service.searchUser(
 		{
 			query: 'test',
-			count: 1
+			count: 10
 		})
 		.then(data =>
 		{
 			expect(data[0]).to.have.property('count');
 			expect(data[0]).to.have.property('userId');
 			expect(data[0]).to.have.property('userName');
-			expect(data).to.have.length(1);
 			done();
 		});
 	});
@@ -69,14 +67,13 @@ describe('service', () =>
 	{
 		service.listFollower(
 		{
-			count: 1
+			count: 10
 		})
 		.then(data =>
 		{
 			expect(data[0]).to.have.property('count');
 			expect(data[0]).to.have.property('userId');
 			expect(data[0]).to.have.property('userName');
-			expect(data).to.have.length(1);
 			done();
 		});
 	});
@@ -85,14 +82,13 @@ describe('service', () =>
 	{
 		service.listFriend(
 		{
-			count: 1
+			count: 10
 		})
 		.then(data =>
 		{
 			expect(data[0]).to.have.property('count');
 			expect(data[0]).to.have.property('userId');
 			expect(data[0]).to.have.property('userName');
-			expect(data).to.have.length(1);
 			done();
 		});
 	});
@@ -101,14 +97,13 @@ describe('service', () =>
 	{
 		service.listTweet(
 		{
-			count: 1
+			count: 10
 		})
 		.then(data =>
 		{
 			expect(data[0]).to.have.property('count');
 			expect(data[0]).to.have.property('tweetId');
 			expect(data[0]).to.have.property('tweetText');
-			expect(data).to.have.length(1);
 			done();
 		});
 	});
@@ -117,7 +112,7 @@ describe('service', () =>
 	{
 		service.listLike(
 		{
-			count: 1
+			count: 10
 		})
 		.then(data =>
 		{
@@ -126,16 +121,15 @@ describe('service', () =>
 			expect(data[0]).to.have.property('tweetText');
 			expect(data[0]).to.have.property('userId');
 			expect(data[0]).to.have.property('userName');
-			expect(data).to.have.length(1);
 			done();
 		});
 	});
 
-	it.skip('tweet', done =>
+	it('tweet', done =>
 	{
 		service.tweet(
 		{
-			tweetText: 'test'
+			tweetText: Date.now()
 		},
 		{
 			undoRun: false
