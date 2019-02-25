@@ -161,11 +161,13 @@ function run(action)
 			else
 			{
 				const optionArray = option.get('general');
+				let hasData = false;
 
 				process.stdin.on('data', data =>
 				{
 					const dataArray = stream.parse(data);
 
+					hasData = true;
 					if (action === 'tweet')
 					{
 						dataArray.map(data => _handleWrite(data, service.tweet, optionArray));
@@ -181,6 +183,13 @@ function run(action)
 					if (action === 'follow')
 					{
 						dataArray.map(data => _handleWrite(data, service.follow, optionArray));
+					}
+				});
+				process.stdin.on('end', () =>
+				{
+					if (!hasData)
+					{
+						spinner.fail(wordingArray.stream_empty + wordingArray.exclamation_mark);
 					}
 				});
 			}

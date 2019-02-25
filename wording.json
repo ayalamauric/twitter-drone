@@ -2,6 +2,7 @@
 	"please_wait": "Please wait",
 	"drone_connected": "Twitter Drone is connected",
 	"drone_waiting": "Twitter Drone is waiting",
+	"stream_empty": "Stream is empty",
 	"tweet_no": "Tweet not found",
 	"user_no": "User not found",
 	"seconds" : "seconds",
