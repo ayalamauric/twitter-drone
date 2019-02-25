@@ -311,18 +311,8 @@ function tweet(data, optionArray)
 
 function retweet(data, optionArray)
 {
-	if (optionArray.undoRun)
-	{
-		return twit
-			.post('statuses/unretweet/' + data.tweetId)
-			.then(response =>
-			{
-				return response.data ? response.data : {};
-			})
-			.then(data => _reduceTweet(data));
-	}
 	return twit
-		.post('statuses/retweet/' + data.tweetId)
+		.post(optionArray.undoRun ? 'statuses/unretweet/' + data.tweetId : 'statuses/retweet/' + data.tweetId)
 		.then(response =>
 		{
 			return response.data ? response.data : {};
@@ -343,21 +333,8 @@ function retweet(data, optionArray)
 
 function like(data, optionArray)
 {
-	if (optionArray.undoRun)
-	{
-		return twit
-			.post('favorites/destroy',
-			{
-				id: data.tweetId
-			})
-			.then(response =>
-			{
-				return response.data ? response.data : {};
-			})
-			.then(data => _reduceTweet(data));
-	}
 	return twit
-		.post('favorites/create',
+		.post(optionArray.undoRun ? 'favorites/destroy' : 'favorites/create',
 		{
 			id: data.tweetId
 		})
@@ -381,21 +358,8 @@ function like(data, optionArray)
 
 function follow(data, optionArray)
 {
-	if (optionArray.undoRun)
-	{
-		return twit
-			.post('friendships/destroy',
-			{
-				id: data.userId
-			})
-			.then(response =>
-			{
-				return response.data ? response.data : {};
-			})
-			.then(data => _reduceUser(data));
-	}
 	return twit
-		.post('friendships/create',
+		.post(optionArray.undoRun ? 'friendships/destroy' : 'friendships/create',
 		{
 			id: data.userId
 		})

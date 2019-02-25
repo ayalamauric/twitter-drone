@@ -1,7 +1,7 @@
 {
 	"name": "twitter-drone",
 	"description": "JSON stream enhanced bot to automate tweet, retweet, like and follow on Twitter",
-	"version": "2.0.0-beta.1",
+	"version": "2.0.0-beta.2",
 	"license": "GPL-3.0",
 	"keywords":
 	[
@@ -34,8 +34,8 @@
 	{
 		"chai": "4.2.0",
 		"eslint": "5.14.1",
-		"eslint-config-redaxmedia": "1.0.1",
-		"mocha": "6.0.1"
+		"eslint-config-redaxmedia": "1.1.0",
+		"mocha": "6.0.2"
 	},
 	"scripts":
 	{

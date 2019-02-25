@@ -98,7 +98,7 @@ describe('core', () =>
 
 	it.skip('tweet', done =>
 	{
-		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone tweet --dry-run', (error, stdout, stderr) =>
+		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone tweet', (error, stdout, stderr) =>
 		{
 			expect(stderr).to.have.length;
 			done();
@@ -107,7 +107,7 @@ describe('core', () =>
 
 	it.skip('retweet', done =>
 	{
-		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone retweet --dry-run', (error, stdout, stderr) =>
+		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone retweet', (error, stdout, stderr) =>
 		{
 			expect(stderr).to.have.length;
 			done();
@@ -116,7 +116,7 @@ describe('core', () =>
 
 	it.skip('like', done =>
 	{
-		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone like --dry-run', (error, stdout, stderr) =>
+		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone like', (error, stdout, stderr) =>
 		{
 			expect(stderr).to.have.length;
 			done();
@@ -125,7 +125,7 @@ describe('core', () =>
 
 	it.skip('follow', done =>
 	{
-		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone follow --dry-run', (error, stdout, stderr) =>
+		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone follow', (error, stdout, stderr) =>
 		{
 			expect(stderr).to.have.length;
 			done();
