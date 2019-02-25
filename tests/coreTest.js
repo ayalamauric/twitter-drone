@@ -96,36 +96,36 @@ describe('core', () =>
 		});
 	});
 
-	it.skip('tweet', done =>
+	it('tweet', done =>
 	{
-		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone tweet', (error, stdout, stderr) =>
+		exec('bin/twitter-drone search tweet --query=test --count=10 | bin/twitter-drone tweet', (error, stdout, stderr) =>
 		{
 			expect(stderr).to.have.length;
 			done();
 		});
 	});
 
-	it.skip('retweet', done =>
+	it('retweet', done =>
 	{
-		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone retweet', (error, stdout, stderr) =>
+		exec('bin/twitter-drone search tweet --query=test --count=10 | bin/twitter-drone retweet', (error, stdout, stderr) =>
 		{
 			expect(stderr).to.have.length;
 			done();
 		});
 	});
 
-	it.skip('like', done =>
+	it('like', done =>
 	{
-		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone like', (error, stdout, stderr) =>
+		exec('bin/twitter-drone search tweet --query=test --count=10 | bin/twitter-drone like', (error, stdout, stderr) =>
 		{
 			expect(stderr).to.have.length;
 			done();
 		});
 	});
 
-	it.skip('follow', done =>
+	it('follow', done =>
 	{
-		exec('bin/twitter-drone search tweet --query=test | bin/twitter-drone follow', (error, stdout, stderr) =>
+		exec('bin/twitter-drone search tweet --query=test --count=10 | bin/twitter-drone follow', (error, stdout, stderr) =>
 		{
 			expect(stderr).to.have.length;
 			done();
