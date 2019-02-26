@@ -99,10 +99,13 @@ List your likes and unlike them:
 bin/twitter-drone list like | bin/twitter-drone like --undo-run
 ```
 
-Fetch last commit via `curl` request. Extract the message using `jq`. Delete newlines using `tr` and tweet it:
+Fetch last commit message from master and tweet it:
 
 ```
-curl https://api.github.com/repos/redaxmedia/twitter-drone/commits/master --silent | jq '{tweetText: .commit.message}' | tr --delete '\n' | bin/twitter-drone tweet
+curl https://api.github.com/repos/redaxmedia/twitter-drone/commits/master --silent |
+jq '{tweetText: .commit.message}' |
+tr --delete '\n' |
+bin/twitter-drone tweet
 ```
 
 Deployment
