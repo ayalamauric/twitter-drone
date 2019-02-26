@@ -161,35 +161,47 @@ function run(action)
 			else
 			{
 				const optionArray = option.get('general');
-				let hasData = false;
+				let hasStream = false;
+				let hasCommand = false;
 
 				process.stdin.on('data', data =>
 				{
 					const dataArray = stream.parse(data);
 
-					hasData = true;
+					if (dataArray.length)
+					{
+						hasStream = true;
+					}
 					if (action === 'tweet')
 					{
+						hasCommand = true;
 						dataArray.map(data => _handleWrite(data, service.tweet, optionArray));
 					}
 					if (action === 'retweet')
 					{
+						hasCommand = true;
 						dataArray.map(data => _handleWrite(data, service.retweet, optionArray));
 					}
 					if (action === 'like')
 					{
+						hasCommand = true;
 						dataArray.map(data => _handleWrite(data, service.like, optionArray));
 					}
 					if (action === 'follow')
 					{
+						hasCommand = true;
 						dataArray.map(data => _handleWrite(data, service.follow, optionArray));
 					}
 				});
 				process.stdin.on('end', () =>
 				{
-					if (!hasData)
+					if (!hasStream)
 					{
-						spinner.fail(wordingArray.stream_empty + wordingArray.exclamation_mark);
+						spinner.fail(wordingArray.stream_no + wordingArray.exclamation_mark);
+					}
+					else if (!hasCommand)
+					{
+						spinner.fail(wordingArray.command_no + wordingArray.exclamation_mark);
 					}
 				});
 			}

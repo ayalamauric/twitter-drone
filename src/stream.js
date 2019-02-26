@@ -17,7 +17,6 @@ function pipe(data)
 	stream.pipe(process.stdout);
 }
 
-
 /**
  * parse the stream
  *
@@ -31,7 +30,20 @@ function parse(data)
 	return data
 		.toString('utf8')
 		.split(os.EOL)
-		.map(dataValue => dataValue ? JSON.parse(dataValue) : null)
+		.map(dataValue =>
+		{
+			if (dataValue)
+			{
+				try
+				{
+					return JSON.parse(dataValue);
+				}
+				catch (exception)
+				{
+					return null;
+				}
+			}
+		})
 		.filter(dataValue => dataValue);
 }
 
@@ -45,7 +57,6 @@ function init()
 {
 	stream = new Stream.PassThrough();
 }
-
 
 module.exports =
 {

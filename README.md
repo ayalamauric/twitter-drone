@@ -1,7 +1,7 @@
 Twitter Drone
 =============
 
-> JSON stream enhanced bot to automate tweet, retweet, like and follow on Twitter.
+> Powerful bot to automate tweet, retweet, like and follow using newline delimited JSON streams.
 
 [![Build Status](https://img.shields.io/travis/redaxmedia/twitter-drone.svg)](https://travis-ci.org/redaxmedia/twitter-drone)
 [![NPM Version](https://img.shields.io/npm/v/twitter-drone.svg)](https://npmjs.com/package/twitter-drone)
@@ -99,6 +99,11 @@ List your likes and unlike them:
 bin/twitter-drone list like | bin/twitter-drone like --undo-run
 ```
 
+Fetch last commit via `curl` request. Extract the message using `jq`. Delete newlines using `tr` and tweet it:
+
+```
+curl https://api.github.com/repos/redaxmedia/twitter-drone/commits/master --silent | jq '{tweetText: .commit.message}' | tr --delete '\n' | bin/twitter-drone tweet
+```
 
 Deployment
 ----------
