@@ -88,7 +88,8 @@ function _dryRun(data)
 
 function run(action)
 {
-	service.verify()
+	service
+		.verifyAccount()
 		.then(() =>
 		{
 			spinner.start(wordingArray.drone_connected + wordingArray.exclamation_mark);
@@ -161,6 +162,7 @@ function run(action)
 			else
 			{
 				const optionArray = option.get('general');
+
 				let hasStream = false;
 				let hasCommand = false;
 

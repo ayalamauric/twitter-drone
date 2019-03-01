@@ -99,14 +99,14 @@ function _reduceUser(data)
 }
 
 /**
- * verify
+ * verify account
  *
  * @since 2.0.0
  *
  * @return Promise
  */
 
-function verify()
+function verifyAccount()
 {
 	return twit
 		.get('account/verify_credentials')
@@ -385,7 +385,7 @@ function init(initArray)
 
 module.exports =
 {
-	verify,
+	verifyAccount,
 	searchTweet,
 	searchUser,
 	listFollower,

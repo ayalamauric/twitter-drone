@@ -26,9 +26,13 @@ program
 		{
 			action = 'search-tweet';
 		}
-		if (command === 'user')
+		else if (command === 'user')
 		{
 			action = 'search-user';
+		}
+		else
+		{
+			process.exit(1);
 		}
 		option.init(
 		{
@@ -52,17 +56,21 @@ program
 		{
 			action = 'list-follower';
 		}
-		if (command === 'friend')
+		else if (command === 'friend')
 		{
 			action = 'list-friend';
 		}
-		if (command === 'tweet')
+		else if (command === 'tweet')
 		{
 			action = 'list-tweet';
 		}
-		if (command === 'like')
+		else if (command === 'like')
 		{
 			action = 'list-like';
+		}
+		else
+		{
+			process.exit(1);
 		}
 		option.init(
 		{
