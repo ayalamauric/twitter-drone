@@ -26,7 +26,11 @@
 		{
 			"required": true
 		},
-		"COMMAND":
+		"COMMAND_READ":
+		{
+			"required": true
+		},
+		"COMMAND_WRITE":
 		{
 			"required": true
 		}

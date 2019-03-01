@@ -1,1 +1,1 @@
-worker: $COMMAND
+worker: $COMMAND_READ | $COMMAND_WRITE
