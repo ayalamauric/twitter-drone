@@ -17,10 +17,10 @@ beforeEach(() =>
 
 describe('service', () =>
 {
-	it('verify', done =>
+	it('verify account', done =>
 	{
 		service
-			.verify()
+			.verifyAccount()
 			.then(data =>
 			{
 				expect(data).to.have.property('userId');
