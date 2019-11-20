@@ -38,11 +38,14 @@ describe('service', () =>
 		})
 		.then(data =>
 		{
-			expect(data[0]).to.have.property('count');
-			expect(data[0]).to.have.property('tweetId');
-			expect(data[0]).to.have.property('tweetText');
-			expect(data[0]).to.have.property('userId');
-			expect(data[0]).to.have.property('userName');
+			if (data[0])
+			{
+				expect(data[0]).to.have.property('count');
+				expect(data[0]).to.have.property('tweetId');
+				expect(data[0]).to.have.property('tweetText');
+				expect(data[0]).to.have.property('userId');
+				expect(data[0]).to.have.property('userName');
+			}
 			done();
 		});
 	});
@@ -56,9 +59,12 @@ describe('service', () =>
 		})
 		.then(data =>
 		{
-			expect(data[0]).to.have.property('count');
-			expect(data[0]).to.have.property('userId');
-			expect(data[0]).to.have.property('userName');
+			if (data[0])
+			{
+				expect(data[0]).to.have.property('count');
+				expect(data[0]).to.have.property('userId');
+				expect(data[0]).to.have.property('userName');
+			}
 			done();
 		});
 	});
@@ -71,9 +77,12 @@ describe('service', () =>
 		})
 		.then(data =>
 		{
-			expect(data[0]).to.have.property('count');
-			expect(data[0]).to.have.property('userId');
-			expect(data[0]).to.have.property('userName');
+			if (data[0])
+			{
+				expect(data[0]).to.have.property('count');
+				expect(data[0]).to.have.property('userId');
+				expect(data[0]).to.have.property('userName');
+			}
 			done();
 		});
 	});
@@ -86,9 +95,12 @@ describe('service', () =>
 		})
 		.then(data =>
 		{
-			expect(data[0]).to.have.property('count');
-			expect(data[0]).to.have.property('userId');
-			expect(data[0]).to.have.property('userName');
+			if (data[0])
+			{
+				expect(data[0]).to.have.property('count');
+				expect(data[0]).to.have.property('userId');
+				expect(data[0]).to.have.property('userName');
+			}
 			done();
 		});
 	});
@@ -101,9 +113,12 @@ describe('service', () =>
 		})
 		.then(data =>
 		{
-			expect(data[0]).to.have.property('count');
-			expect(data[0]).to.have.property('tweetId');
-			expect(data[0]).to.have.property('tweetText');
+			if (data[0])
+			{
+				expect(data[0]).to.have.property('count');
+				expect(data[0]).to.have.property('tweetId');
+				expect(data[0]).to.have.property('tweetText');
+			}
 			done();
 		});
 	});
@@ -116,11 +131,14 @@ describe('service', () =>
 		})
 		.then(data =>
 		{
-			expect(data[0]).to.have.property('count');
-			expect(data[0]).to.have.property('tweetId');
-			expect(data[0]).to.have.property('tweetText');
-			expect(data[0]).to.have.property('userId');
-			expect(data[0]).to.have.property('userName');
+			if (data[0])
+			{
+				expect(data[0]).to.have.property('count');
+				expect(data[0]).to.have.property('tweetId');
+				expect(data[0]).to.have.property('tweetText');
+				expect(data[0]).to.have.property('userId');
+				expect(data[0]).to.have.property('userName');
+			}
 			done();
 		});
 	});

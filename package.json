@@ -1,7 +1,7 @@
 {
 	"name": "twitter-drone",
 	"description": "Powerful bot to automate tweet, retweet, like and follow using newline delimited JSON streams",
-	"version": "2.0.1",
+	"version": "2.1.0",
 	"license": "GPL-3.0",
 	"keywords":
 	[
@@ -25,22 +25,23 @@
 	},
 	"dependencies":
 	{
-		"commander": "2.19.0",
-		"dotenv": "6.2.0",
-		"ora": "3.1.0",
+		"commander": "4.0.1",
+		"dotenv": "8.2.0",
+		"ora": "4.0.3",
 		"twit": "2.2.11"
 	},
 	"devDependencies":
 	{
 		"chai": "4.2.0",
-		"eslint": "5.14.1",
-		"eslint-config-redaxmedia": "1.1.0",
-		"mocha": "6.0.2"
+		"eslint": "6.6.0",
+		"eslint-config-redaxmedia": "1.2.0",
+		"mocha": "6.2.2"
 	},
 	"scripts":
 	{
 		"start": "bin/twitter-drone --version",
 		"lint": "eslint bin/twitter-drone src tests",
+		"fix": "eslint bin/twitter-drone src tests --fix",
 		"test": "mocha tests/*Test.js"
 	},
 	"bin":
