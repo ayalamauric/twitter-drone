@@ -18,11 +18,14 @@ describe('core', () =>
 		{
 			const dataArray = stream.parse(stdout);
 
-			expect(dataArray[0]).to.have.property('count');
-			expect(dataArray[0]).to.have.property('tweetId');
-			expect(dataArray[0]).to.have.property('tweetText');
-			expect(dataArray[0]).to.have.property('userId');
-			expect(dataArray[0]).to.have.property('userName');
+			if (dataArray[0])
+			{
+				expect(dataArray[0]).to.have.property('count');
+				expect(dataArray[0]).to.have.property('tweetId');
+				expect(dataArray[0]).to.have.property('tweetText');
+				expect(dataArray[0]).to.have.property('userId');
+				expect(dataArray[0]).to.have.property('userName');
+			}
 			done();
 		});
 	});
@@ -33,9 +36,12 @@ describe('core', () =>
 		{
 			const dataArray = stream.parse(stdout);
 
-			expect(dataArray[0]).to.have.property('count');
-			expect(dataArray[0]).to.have.property('userId');
-			expect(dataArray[0]).to.have.property('userName');
+			if (dataArray[0])
+			{
+				expect(dataArray[0]).to.have.property('count');
+				expect(dataArray[0]).to.have.property('userId');
+				expect(dataArray[0]).to.have.property('userName');
+			}
 			done();
 		});
 	});
@@ -46,9 +52,12 @@ describe('core', () =>
 		{
 			const dataArray = stream.parse(stdout);
 
-			expect(dataArray[0]).to.have.property('count');
-			expect(dataArray[0]).to.have.property('userId');
-			expect(dataArray[0]).to.have.property('userName');
+			if (dataArray[0])
+			{
+				expect(dataArray[0]).to.have.property('count');
+				expect(dataArray[0]).to.have.property('userId');
+				expect(dataArray[0]).to.have.property('userName');
+			}
 			done();
 		});
 	});
@@ -59,9 +68,12 @@ describe('core', () =>
 		{
 			const dataArray = stream.parse(stdout);
 
-			expect(dataArray[0]).to.have.property('count');
-			expect(dataArray[0]).to.have.property('userId');
-			expect(dataArray[0]).to.have.property('userName');
+			if (dataArray[0])
+			{
+				expect(dataArray[0]).to.have.property('count');
+				expect(dataArray[0]).to.have.property('userId');
+				expect(dataArray[0]).to.have.property('userName');
+			}
 			done();
 		});
 	});
@@ -72,11 +84,14 @@ describe('core', () =>
 		{
 			const dataArray = stream.parse(stdout);
 
-			expect(dataArray[0]).to.have.property('count');
-			expect(dataArray[0]).to.have.property('tweetId');
-			expect(dataArray[0]).to.have.property('tweetText');
-			expect(dataArray[0]).to.have.property('userId');
-			expect(dataArray[0]).to.have.property('userName');
+			if (dataArray[0])
+			{
+				expect(dataArray[0]).to.have.property('count');
+				expect(dataArray[0]).to.have.property('tweetId');
+				expect(dataArray[0]).to.have.property('tweetText');
+				expect(dataArray[0]).to.have.property('userId');
+				expect(dataArray[0]).to.have.property('userName');
+			}
 			done();
 		});
 	});
@@ -87,11 +102,14 @@ describe('core', () =>
 		{
 			const dataArray = stream.parse(stdout);
 
-			expect(dataArray[0]).to.have.property('count');
-			expect(dataArray[0]).to.have.property('tweetId');
-			expect(dataArray[0]).to.have.property('tweetText');
-			expect(dataArray[0]).to.have.property('userId');
-			expect(dataArray[0]).to.have.property('userName');
+			if (dataArray[0])
+			{
+				expect(dataArray[0]).to.have.property('count');
+				expect(dataArray[0]).to.have.property('tweetId');
+				expect(dataArray[0]).to.have.property('tweetText');
+				expect(dataArray[0]).to.have.property('userId');
+				expect(dataArray[0]).to.have.property('userName');
+			}
 			done();
 		});
 	});

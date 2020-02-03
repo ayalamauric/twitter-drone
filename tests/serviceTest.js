@@ -36,15 +36,15 @@ describe('service', () =>
 			query: 'test',
 			count: 10
 		})
-		.then(data =>
+		.then(dataArray =>
 		{
-			if (data[0])
+			if (dataArray[0])
 			{
-				expect(data[0]).to.have.property('count');
-				expect(data[0]).to.have.property('tweetId');
-				expect(data[0]).to.have.property('tweetText');
-				expect(data[0]).to.have.property('userId');
-				expect(data[0]).to.have.property('userName');
+				expect(dataArray[0]).to.have.property('count');
+				expect(dataArray[0]).to.have.property('tweetId');
+				expect(dataArray[0]).to.have.property('tweetText');
+				expect(dataArray[0]).to.have.property('userId');
+				expect(dataArray[0]).to.have.property('userName');
 			}
 			done();
 		});
@@ -57,13 +57,13 @@ describe('service', () =>
 			query: 'test',
 			count: 10
 		})
-		.then(data =>
+		.then(dataArray =>
 		{
-			if (data[0])
+			if (dataArray[0])
 			{
-				expect(data[0]).to.have.property('count');
-				expect(data[0]).to.have.property('userId');
-				expect(data[0]).to.have.property('userName');
+				expect(dataArray[0]).to.have.property('count');
+				expect(dataArray[0]).to.have.property('userId');
+				expect(dataArray[0]).to.have.property('userName');
 			}
 			done();
 		});
@@ -75,13 +75,13 @@ describe('service', () =>
 		{
 			count: 10
 		})
-		.then(data =>
+		.then(dataArray =>
 		{
-			if (data[0])
+			if (dataArray[0])
 			{
-				expect(data[0]).to.have.property('count');
-				expect(data[0]).to.have.property('userId');
-				expect(data[0]).to.have.property('userName');
+				expect(dataArray[0]).to.have.property('count');
+				expect(dataArray[0]).to.have.property('userId');
+				expect(dataArray[0]).to.have.property('userName');
 			}
 			done();
 		});
@@ -93,13 +93,13 @@ describe('service', () =>
 		{
 			count: 10
 		})
-		.then(data =>
+		.then(dataArray =>
 		{
-			if (data[0])
+			if (dataArray[0])
 			{
-				expect(data[0]).to.have.property('count');
-				expect(data[0]).to.have.property('userId');
-				expect(data[0]).to.have.property('userName');
+				expect(dataArray[0]).to.have.property('count');
+				expect(dataArray[0]).to.have.property('userId');
+				expect(dataArray[0]).to.have.property('userName');
 			}
 			done();
 		});
@@ -111,13 +111,13 @@ describe('service', () =>
 		{
 			count: 10
 		})
-		.then(data =>
+		.then(dataArray =>
 		{
-			if (data[0])
+			if (dataArray[0])
 			{
-				expect(data[0]).to.have.property('count');
-				expect(data[0]).to.have.property('tweetId');
-				expect(data[0]).to.have.property('tweetText');
+				expect(dataArray[0]).to.have.property('count');
+				expect(dataArray[0]).to.have.property('tweetId');
+				expect(dataArray[0]).to.have.property('tweetText');
 			}
 			done();
 		});
@@ -129,15 +129,15 @@ describe('service', () =>
 		{
 			count: 10
 		})
-		.then(data =>
+		.then(dataArray =>
 		{
-			if (data[0])
+			if (dataArray[0])
 			{
-				expect(data[0]).to.have.property('count');
-				expect(data[0]).to.have.property('tweetId');
-				expect(data[0]).to.have.property('tweetText');
-				expect(data[0]).to.have.property('userId');
-				expect(data[0]).to.have.property('userName');
+				expect(dataArray[0]).to.have.property('count');
+				expect(dataArray[0]).to.have.property('tweetId');
+				expect(dataArray[0]).to.have.property('tweetText');
+				expect(dataArray[0]).to.have.property('userId');
+				expect(dataArray[0]).to.have.property('userName');
 			}
 			done();
 		});
