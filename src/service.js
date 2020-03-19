@@ -1,6 +1,7 @@
-const Twit = require('twit');
+const fetch = require('node-fetch');
 
-let twit;
+let credentialArray = [];
+let authArray = [];
 
 /**
  * map the tweet
@@ -99,28 +100,128 @@ function _reduceUser(data)
 }
 
 /**
- * verify account
+ * send get request
  *
- * @since 2.0.0
+ * @since 3.0.0
+ *
+ * @param route of the request
+ * @param param array
  *
  * @return Promise
  */
 
-function verifyAccount()
+function _get(route, paramArray)
 {
-	return twit
-		.get('account/verify_credentials')
-		.then(response =>
+	let params = new URLSearchParams();
+
+	paramArray.map(paramValue => params = params.set(paramValue, paramArray[paramValue]));
+	return fetch('https://api.twitter.com/1.1' + route,
+	{
+		method: 'GET',
+		header: authArray.tokenType && authArray.accessToken ?
 		{
-			return response.data ? response.data : {};
-		})
-		.then(data => _reduceUser(data));
+			Authorization: authArray.tokenType +' ' + authArray.accessToken
+		} : {},
+		params
+	});
+}
+
+/**
+ * send post request
+ *
+ * @since 3.0.0
+ *
+ * @param route of the request
+ * @param body array
+ *
+ * @return Promise
+ */
+
+function _post(route, bodyArray)
+{
+	return fetch('https://api.twitter.com/1.1' + route,
+	{
+		method: 'POST',
+		header: authArray.tokenType && authArray.accessToken ?
+		{
+			Authorization: authArray.tokenType +' ' + authArray.accessToken
+		} : {},
+		body: JSON.stringify(bodyArray)
+	});
+}
+
+/**
+ * btoa
+ *
+ * @since 3.0.0
+ *
+ * @param input
+ *
+ * @return string
+ */
+
+function _btoa(input)
+{
+	return new Buffer(input).toString('base64');
+}
+
+/**
+ * login
+ *
+ * @since 3.0.0
+ *
+ * @return Promise
+ */
+
+function login()
+{
+	return fetch('https://api.twitter.com/1.1/oauth2/token',
+	{
+		method: 'POST',
+		headers: credentialArray.consumerKey && credentialArray.consumerSecret ?
+		{
+			Authorization: 'basic ' + _btoa(credentialArray.consumerKey + ':' + credentialArray.consumerSecret)
+		} : {},
+		body:
+		{
+			grant_type: 'client_credentials'
+		}
+	})
+	.then(response =>
+	{
+		authArray =
+		{
+			accessToken: response.access_token,
+			tokenType: response.token_type
+		};
+	});
+}
+
+/**
+ * verify
+ *
+ * @since 3.0.0
+ *
+ * @return Promise
+ */
+
+function verify()
+{
+	new Promise((resolve, reject) =>
+	{
+		_get('/account/verify_credentials')
+			.then(() => resolve())
+			.catch(() => login()
+				.then(() => resolve())
+				.catch(() => reject())
+			);
+	});
 }
 
 /**
  * search the tweet
  *
- * @since 2.0.0
+ * @since 3.0.0
  *
  * @param optionArray array
  *
@@ -129,8 +230,7 @@ function verifyAccount()
 
 function searchTweet(optionArray)
 {
-	return twit
-		.get('search/tweets',
+	return _get('/search/tweets',
 		{
 			q: optionArray.query,
 			count: optionArray.count
@@ -145,7 +245,7 @@ function searchTweet(optionArray)
 /**
  * search the user
  *
- * @since 2.0.0
+ * @since 3.0.0
  *
  * @param optionArray array
  *
@@ -154,8 +254,7 @@ function searchTweet(optionArray)
 
 function searchUser(optionArray)
 {
-	return twit
-		.get('users/search',
+	return _get('/users/search',
 		{
 			q: optionArray.query,
 			count: optionArray.count
@@ -170,7 +269,7 @@ function searchUser(optionArray)
 /**
  * list the follower
  *
- * @since 2.0.0
+ * @since 3.0.0
  *
  * @param optionArray array
  *
@@ -179,8 +278,7 @@ function searchUser(optionArray)
 
 function listFollower(optionArray)
 {
-	return twit
-		.get('followers/list',
+	return _get('/followers/list',
 		{
 			count: optionArray.count
 		})
@@ -194,7 +292,7 @@ function listFollower(optionArray)
 /**
  * list the friend
  *
- * @since 2.0.0
+ * @since 3.0.0
  *
  * @param optionArray array
  *
@@ -203,8 +301,7 @@ function listFollower(optionArray)
 
 function listFriend(optionArray)
 {
-	return twit
-		.get('friends/list',
+	return _get('/friends/list',
 		{
 			count: optionArray.count
 		})
@@ -218,7 +315,7 @@ function listFriend(optionArray)
 /**
  * list the tweet
  *
- * @since 2.0.0
+ * @since 3.0.0
  *
  * @param optionArray array
  *
@@ -227,8 +324,7 @@ function listFriend(optionArray)
 
 function listTweet(optionArray)
 {
-	return twit
-		.get('statuses/user_timeline',
+	return _get('/statuses/user_timeline',
 		{
 			count: optionArray.count
 		})
@@ -242,7 +338,7 @@ function listTweet(optionArray)
 /**
  * list the like
  *
- * @since 2.0.0
+ * @since 3.0.0
  *
  * @param optionArray array
  *
@@ -251,8 +347,7 @@ function listTweet(optionArray)
 
 function listLike(optionArray)
 {
-	return twit
-		.get('favorites/list',
+	return _get('/favorites/list',
 		{
 			count: optionArray.count
 		})
@@ -266,7 +361,7 @@ function listLike(optionArray)
 /**
  * tweet
  *
- * @since 2.0.0
+ * @since 3.0.0
  *
  * @param data array
  * @param optionArray array
@@ -278,16 +373,14 @@ function tweet(data, optionArray)
 {
 	if (optionArray.undoRun)
 	{
-		return twit
-			.post('statuses/destroy/' + data.tweetId)
+		return _post('/statuses/destroy/' + data.tweetId)
 			.then(response =>
 			{
 				return response.data ? response.data : {};
 			})
 			.then(data => _reduceTweet(data));
 	}
-	return twit
-		.post('statuses/update',
+	return _post('/statuses/update',
 		{
 			status: data.tweetText
 		})
@@ -301,7 +394,7 @@ function tweet(data, optionArray)
 /**
  * retweet
  *
- * @since 2.0.0
+ * @since 3.0.0
  *
  * @param data array
  * @param optionArray array
@@ -311,8 +404,7 @@ function tweet(data, optionArray)
 
 function retweet(data, optionArray)
 {
-	return twit
-		.post(optionArray.undoRun ? 'statuses/unretweet/' + data.tweetId : 'statuses/retweet/' + data.tweetId)
+	return _post(optionArray.undoRun ? '/statuses/unretweet/' + data.tweetId : '/statuses/retweet/' + data.tweetId)
 		.then(response =>
 		{
 			return response.data ? response.data : {};
@@ -323,7 +415,7 @@ function retweet(data, optionArray)
 /**
  * like
  *
- * @since 2.0.0
+ * @since 3.0.0
  *
  * @param data array
  * @param optionArray array
@@ -333,8 +425,7 @@ function retweet(data, optionArray)
 
 function like(data, optionArray)
 {
-	return twit
-		.post(optionArray.undoRun ? 'favorites/destroy' : 'favorites/create',
+	return _post(optionArray.undoRun ? '/favorites/destroy' : '/favorites/create',
 		{
 			id: data.tweetId
 		})
@@ -348,7 +439,7 @@ function like(data, optionArray)
 /**
  * follow
  *
- * @since 2.0.0
+ * @since 3.0.0
  *
  * @param data array
  * @param optionArray array
@@ -358,8 +449,7 @@ function like(data, optionArray)
 
 function follow(data, optionArray)
 {
-	return twit
-		.post(optionArray.undoRun ? 'friendships/destroy' : 'friendships/create',
+	return _post(optionArray.undoRun ? '/friendships/destroy' : '/friendships/create',
 		{
 			id: data.userId
 		})
@@ -373,19 +463,20 @@ function follow(data, optionArray)
 /**
  * init
  *
- * @since 2.0.0
+ * @since 3.0.0
  *
- * @param initArray array
+ * @param init array
  */
 
 function init(initArray)
 {
-	twit = new Twit(initArray);
+	credentialArray = initArray;
 }
 
 module.exports =
 {
-	verifyAccount,
+	login,
+	verify,
 	searchTweet,
 	searchUser,
 	listFollower,
