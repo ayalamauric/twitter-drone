@@ -89,7 +89,7 @@ function _dryRun(data)
 function run(action)
 {
 	service
-		.verifyAccount()
+		.verify()
 		.then(() =>
 		{
 			spinner.start(wordingArray.drone_connected + wordingArray.exclamation_mark);
