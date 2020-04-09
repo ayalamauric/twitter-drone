@@ -9,12 +9,6 @@ Twitter Drone
 [![Deploy Heroku](https://img.shields.io/badge/deploy-heroku-7056bf.svg)](https://heroku.com/deploy?template=https://github.com/redaxmedia/twitter-drone)
 
 
-Preview
--------
-
-![Terminal Session](https://cdn.rawgit.com/redaxmedia/media/master/twitter-drone/terminal-session.svg)
-
-
 Installation
 ------------
 
